@@ -15,6 +15,14 @@ const finderPattern = [
 	1, 1, 1, 1, 1, 1, 1,
 ];
 
+const alignmentPattern = [
+	1, 1, 1, 1, 1,
+	1, 0, 0, 0, 1,
+	1, 0, 1, 0, 1,
+	1, 0, 0, 0, 1,
+	1, 1, 1, 1, 1,
+]
+
 function drawQrCode(qrcode, qrcodeDimensions) {
 	for (let it = 0; it < (qrcodeDimensions * qrcodeDimensions); it++) {
 		const color = qrcode[it] === 1 ? "black" : "white";
@@ -48,6 +56,33 @@ function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data) {
 	}
 }
 
+// Source - https://stackoverflow.com/a/73349304
+// Posted by YourMJK, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-02-18, License - CC BY-SA 4.0
+function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
+    if (qrcodeVersion <= 1) return;
+	let coordinates = [];
+    let intervals = Math.floor((qrcodeVersion / 7)) + 1;  // Number of gaps between alignment patterns
+    let distance = 4 * qrcodeVersion + 4;  // Distance between first and last alignment pattern
+    let step = Math.round(distance / intervals);  // Round equal spacing to nearest integer
+    step = 2 * Math.round(step / 2);;  // Round step to next even number
+    coordinates[0] = 6;  // First coordinate is always 6 (can't be calculated with step)
+    for (let i = 1; i <= intervals; i++) {
+        coordinates[i] = 6 + distance - step * (intervals - i);  // Start right/bottom and go left/up by step*k
+    }
+	console.log(coordinates)
+
+	const allPairs = coordinates.flatMap(a => coordinates.map(b => [a, b]));
+	console.log(allPairs)
+	
+	for (let it = 0; it < ((intervals + 1) * (intervals + 1)); it++) {
+		const x = allPairs[it][0];
+		const y = allPairs[it][1];
+		if ((x <= 7 && (y <= 7 || y >= (qrcodeDimensions - 8))) || (x >= (qrcodeDimensions - 8) && y <= 7)) continue; // Don't place inside finder Patterns
+		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, alignmentPattern);
+	}
+}
+
 function generate() {
 	let qrcodeVersion = 1;
 	let qrcodeDimensions = 21 + ((qrcodeVersion - 1) * 4);
@@ -60,11 +95,9 @@ function generate() {
 	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern);
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern);
-	console.log(timingPatternLen)
-	console.log(timingPattern)
 
-	
-	//console.log(errorLevel.value);
+	setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions);
+
 	canvasctx.canvas.width  = qrcodeDimensions * pixelsize;
 	canvasctx.canvas.height = qrcodeDimensions * pixelsize;
 	drawQrCode(qrcode, qrcodeDimensions);
