@@ -70,14 +70,12 @@ function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
     for (let i = 1; i <= intervals; i++) {
         coordinates[i] = 6 + distance - step * (intervals - i);  // Start right/bottom and go left/up by step*k
     }
-	console.log(coordinates)
 
-	const allPairs = coordinates.flatMap(a => coordinates.map(b => [a, b]));
-	console.log(allPairs)
+	const allPairs = coordinates.flatMap(a => coordinates.map(b => [a, b])); // Cartesian product of the coordinates wit itself
 	
 	for (let it = 0; it < ((intervals + 1) * (intervals + 1)); it++) {
-		const x = allPairs[it][0];
-		const y = allPairs[it][1];
+		const x = allPairs[it][0]; // Center x
+		const y = allPairs[it][1]; // Center y
 		if ((x <= 7 && (y <= 7 || y >= (qrcodeDimensions - 8))) || (x >= (qrcodeDimensions - 8) && y <= 7)) continue; // Don't place inside finder Patterns
 		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, alignmentPattern);
 	}
@@ -87,14 +85,14 @@ function generate() {
 	let qrcodeVersion = 1;
 	let qrcodeDimensions = 21 + ((qrcodeVersion - 1) * 4);
 	let qrcode = [];
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, finderPattern);
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, finderPattern);
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, finderPattern);
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, finderPattern); // Top left
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, finderPattern); // Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, finderPattern); // Bottom left
 
 	const timingPatternLen = qrcodeDimensions - 16;
 	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
-	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern);
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern);
+	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern); // Top left to Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern); // Top left to Top right
 
 	setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions);
 
