@@ -81,6 +81,20 @@ function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
 	}
 }
 
+function determinEncoding(text) {
+	if (/^[0-9]+$/.test(text)) {
+		return 0;
+	} else if (/^[0-9A-Z \$%\*\+\-\.\/:]+$/.test(text)) {
+		return 1;
+	} else {
+		return 2;
+	}
+}
+
+function encodeData() {
+	const encoding = determinEncoding(inputData.value);
+}
+
 function generate() {
 	let qrcodeVersion = 1;
 	let qrcodeDimensions = 21 + ((qrcodeVersion - 1) * 4);
