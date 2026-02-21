@@ -1,3 +1,5 @@
+import capacities from "./capacities.json" with { type: "json" };
+
 const canvas = document.getElementById("qrcode");
 const inputData = document.getElementById("input");
 const errorLevel = document.getElementById("errorlvl");
@@ -83,16 +85,38 @@ function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
 
 function determinEncoding(text) {
 	if (/^[0-9]+$/.test(text)) {
-		return 0;
+		return "numeric";
 	} else if (/^[0-9A-Z \$%\*\+\-\.\/:]+$/.test(text)) {
-		return 1;
+		return "alphanumeric";
 	} else {
-		return 2;
+		return "byte";
 	}
 }
 
+function determinQRCodeInfo() {
+	const input = inputData.value;
+	const errorCorrection = errorLevel.value;
+	const encoding = determinEncoding(input);
+
+	for(let i = 1; i <= 40; i++) {
+		const limit = capacities[`${i}`][errorCorrection][encoding];
+		if(limit >= input.length) {
+			return {
+				version: i,
+				encoding,
+				limit: limit
+			};
+		}
+	}
+	return {
+		version: 40,
+		encoding,
+		limit: capacities["40"][errorCorrection][encoding]
+	};
+}
+
 function encodeData() {
-	const encoding = determinEncoding(inputData.value);
+	const info = determinQRCodeInfo();
 }
 
 function generate() {
