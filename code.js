@@ -123,14 +123,12 @@ function determinQRCodeInfo() {
 	};
 }
 
-function encodeData() {
-	const info = determinQRCodeInfo();
-}
+function encodeData(info) {}
 
 function generate() {
-	let qrcodeVersion = 7;
-	let qrcodeDimensions = 21 + ((qrcodeVersion - 1) * 4);
-	let qrcode = Array.from({length: qrcodeDimensions**2}).fill(0);
+	const info = determinQRCodeInfo();
+	const qrcodeDimensions = 21 + ((info.version - 1) * 4);
+	const qrcode = Array.from({length: qrcodeDimensions**2}).fill(0);
 
 	console.groupCollapsed("generate: Expected warnings");
 	const finderSeperator = Array.from({length: 8}).fill(0);
@@ -149,7 +147,7 @@ function generate() {
 	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator); // Left to right
 	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator); // Top to bottom
 
-	setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions);
+	setAlignmentPatterns(qrcode, info.version, qrcodeDimensions);
 
 	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern); // Top left to Bottom left
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern); // Top left to Top right
