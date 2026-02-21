@@ -7,6 +7,9 @@ const canvasctx = canvas.getContext("2d");
 
 const pixelsize = 8;
 
+const PIXEL_BLACK_FLAG 		= 0b1;
+const PIXEL_RESERVED_FLAG 	= 0b10;
+
 const finderPattern = [
 	1, 1, 1, 1, 1, 1, 1,
 	1, 0, 0, 0, 0, 0, 1,
@@ -27,7 +30,7 @@ const alignmentPattern = [
 
 function drawQrCode(qrcode, qrcodeDimensions) {
 	for (let it = 0; it < (qrcodeDimensions * qrcodeDimensions); it++) {
-		const color = qrcode[it] === 1 ? "black" : "white";
+		const color = (qrcode[it] & PIXEL_BLACK_FLAG) ? "black" : "white";
 
 		canvasctx.fillStyle = color;
 		const x = it % qrcodeDimensions;
@@ -54,7 +57,12 @@ function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data) {
 		const rowOffset = Math.floor(it / w);
 		const colOffset = it % w;
 		const index = (y + rowOffset) * qrcodeDimensions + (x + colOffset);
-		qrcode[index] = data[it];
+		if (qrcode[index] & PIXEL_RESERVED_FLAG) {
+			console.warn(`setQrCodeArea: Function tried setting reserved pixel (x=${x + colOffset}, y=${y + rowOffset}) to ${data[it]}`);
+		} else {
+			const color = data[it] === 0 ? 0 : 1;
+			qrcode[index] = color | PIXEL_RESERVED_FLAG;
+		}
 	}
 }
 
@@ -120,19 +128,32 @@ function encodeData() {
 }
 
 function generate() {
-	let qrcodeVersion = 1;
+	let qrcodeVersion = 7;
 	let qrcodeDimensions = 21 + ((qrcodeVersion - 1) * 4);
-	let qrcode = [];
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, finderPattern); // Top left
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, finderPattern); // Top right
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, finderPattern); // Bottom left
+	let qrcode = Array.from({length: qrcodeDimensions**2}).fill(0);
 
+	console.groupCollapsed("generate: Expected warnings");
+	const finderSeperator = Array.from({length: 8}).fill(0);
 	const timingPatternLen = qrcodeDimensions - 16;
 	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
-	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern); // Top left to Bottom left
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern); // Top left to Top right
+
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, finderPattern); // Top left
+	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 7, 8, 1, finderSeperator); // Left to right
+
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, finderPattern); // Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 0, 1, 8, finderSeperator); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 7, 8, 1, finderSeperator); // Left to right
+
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, finderPattern); // Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator); // Top to bottom
 
 	setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions);
+
+	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern); // Top left to Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern); // Top left to Top right
+	console.groupEnd();
 
 	canvasctx.canvas.width  = qrcodeDimensions * pixelsize;
 	canvasctx.canvas.height = qrcodeDimensions * pixelsize;
