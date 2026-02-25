@@ -160,7 +160,7 @@ function encodeData(info) {
 	let ret = [];
 	if(info.encoding === "numeric") {
 		const mode 	= intToBitsFixed(1, 4); // 0001 is the mode indicator for numbers
-		const countLen = 10; // See table above
+		let countLen = 10; // See table above
 		if(info.version >= 10) countLen = 12;
 		if(info.version >= 27) countLen = 14;
 		const len 	= intToBitsFixed(inputData.value.length, countLen); // character count indicator must be countLen bits long
@@ -179,7 +179,7 @@ function encodeData(info) {
 		});
 	} else if(info.encoding === "alphanumeric") {
 		const mode 	= intToBitsFixed(2, 4); // 0010 is the mode indicator for numbers
-		const countLen = 9; // See table above
+		let countLen = 9; // See table above
 		if(info.version >= 10) countLen = 11;
 		if(info.version >= 27) countLen = 13;
 		const len 	= intToBitsFixed(inputData.value.length, countLen); // character count indicator must be countLen bits long
@@ -204,7 +204,7 @@ function encodeData(info) {
 		});
 	} else { // info.encodeing === "byte"
 		const mode 	= intToBitsFixed(4, 4); // 0100 is the mode indicator for numbers
-		const countLen = 8; // See table above
+		let countLen = 8; // See table above
 		if(info.version >= 10) countLen = 16;
 		const len 	= intToBitsFixed(inputData.value.length, countLen); // character count indicator must be countLen bits long
 
