@@ -194,7 +194,17 @@ function encodeData(info) {
 			}
 		});
 	} else { // info.encodeing === "byte"
+		const mode 	= intToBitsFixed(4, 4); // 0100 is the mode indicator for numbers
+		const len 	= intToBitsFixed(inputData.value.length, 8); // character count indicator must be 8 bits 
 
+		ret = [...ret, ...mode, ...len];
+
+		for(let it = 0; it < inputData.value.length; it++) {
+			const num = inputData.value.charCodeAt(it); // Convert to ascii code
+			const bin = intToBitsFixed(num, 8);
+
+			ret = [...ret, ...bin];
+		}
 	}
 	ret = [...ret, 0, 0, 0, 0]; // Terminator for all QR code bit streams
 	const padLen = 8 - (ret.length % 8); // Codewords are 8 Bit long
