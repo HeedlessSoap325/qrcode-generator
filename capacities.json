@@ -1,242 +1,242 @@
 {
 	"1": {
-		"L": {"numeric": 41, "alphanumeric": 25, "byte": 17},
-		"M": {"numeric": 34, "alphanumeric": 20, "byte": 14},
-		"Q": {"numeric": 27, "alphanumeric": 16, "byte": 11},
-		"H": {"numeric": 17, "alphanumeric": 10, "byte": 7}
+		"L": {"numeric": 41, "alphanumeric": 25, "byte": 17, "maxCodewords": 19},
+		"M": {"numeric": 34, "alphanumeric": 20, "byte": 14, "maxCodewords": 16},
+		"Q": {"numeric": 27, "alphanumeric": 16, "byte": 11, "maxCodewords": 13},
+		"H": {"numeric": 17, "alphanumeric": 10, "byte": 7, "maxCodewords": 9}
 	},
 	"2": {
-		"L": {"numeric": 77, "alphanumeric": 47, "byte": 32},
-		"M": {"numeric": 63, "alphanumeric": 38, "byte": 26},
-		"Q": {"numeric": 48, "alphanumeric": 29, "byte": 20},
-		"H": {"numeric": 34, "alphanumeric": 20, "byte": 14}
+		"L": {"numeric": 77, "alphanumeric": 47, "byte": 32, "maxCodewords": 34},
+		"M": {"numeric": 63, "alphanumeric": 38, "byte": 26, "maxCodewords": 28},
+		"Q": {"numeric": 48, "alphanumeric": 29, "byte": 20, "maxCodewords": 22},
+		"H": {"numeric": 34, "alphanumeric": 20, "byte": 14, "maxCodewords": 16}
 	},
 	"3": {
-		"L": {"numeric": 127, "alphanumeric": 77, "byte": 53},
-		"M": {"numeric": 101, "alphanumeric": 61, "byte": 42},
-		"Q": {"numeric": 77, "alphanumeric": 47, "byte": 32},
-		"H": {"numeric": 58, "alphanumeric": 35, "byte": 24}
+		"L": {"numeric": 127, "alphanumeric": 77, "byte": 53, "maxCodewords": 55},
+		"M": {"numeric": 101, "alphanumeric": 61, "byte": 42, "maxCodewords": 44},
+		"Q": {"numeric": 77, "alphanumeric": 47, "byte": 32, "maxCodewords": 34},
+		"H": {"numeric": 58, "alphanumeric": 35, "byte": 24, "maxCodewords": 26}
 	},
 	"4": {
-		"L": {"numeric": 187, "alphanumeric": 114, "byte": 78},
-		"M": {"numeric": 149, "alphanumeric": 90, "byte": 62},
-		"Q": {"numeric": 111, "alphanumeric": 67, "byte": 46},
-		"H": {"numeric": 82, "alphanumeric": 50, "byte": 34}
+		"L": {"numeric": 187, "alphanumeric": 114, "byte": 78, "maxCodewords": 80},
+		"M": {"numeric": 149, "alphanumeric": 90, "byte": 62, "maxCodewords": 64},
+		"Q": {"numeric": 111, "alphanumeric": 67, "byte": 46, "maxCodewords": 48},
+		"H": {"numeric": 82, "alphanumeric": 50, "byte": 34, "maxCodewords": 36}
 	},
 	"5": {
-		"L": {"numeric": 255, "alphanumeric": 154, "byte": 106},
-		"M": {"numeric": 202, "alphanumeric": 122, "byte": 84},
-		"Q": {"numeric": 144, "alphanumeric": 87, "byte": 60},
-		"H": {"numeric": 106, "alphanumeric": 64, "byte": 44}
+		"L": {"numeric": 255, "alphanumeric": 154, "byte": 106, "maxCodewords": 108},
+		"M": {"numeric": 202, "alphanumeric": 122, "byte": 84, "maxCodewords": 86},
+		"Q": {"numeric": 144, "alphanumeric": 87, "byte": 60, "maxCodewords": 62},
+		"H": {"numeric": 106, "alphanumeric": 64, "byte": 44, "maxCodewords": 46}
 	},
 	"6": {
-		"L": {"numeric": 322, "alphanumeric": 195, "byte": 134},
-		"M": {"numeric": 255, "alphanumeric": 154, "byte": 106},
-		"Q": {"numeric": 178, "alphanumeric": 108, "byte": 74},
-		"H": {"numeric": 139, "alphanumeric": 84, "byte": 58}
+		"L": {"numeric": 322, "alphanumeric": 195, "byte": 134, "maxCodewords": 136},
+		"M": {"numeric": 255, "alphanumeric": 154, "byte": 106, "maxCodewords": 108},
+		"Q": {"numeric": 178, "alphanumeric": 108, "byte": 74, "maxCodewords": 76},
+		"H": {"numeric": 139, "alphanumeric": 84, "byte": 58, "maxCodewords": 60}
 	},
 	"7": {
-		"L": {"numeric": 370, "alphanumeric": 224, "byte": 154},
-		"M": {"numeric": 293, "alphanumeric": 178, "byte": 122},
-		"Q": {"numeric": 207, "alphanumeric": 125, "byte": 86},
-		"H": {"numeric": 154, "alphanumeric": 93, "byte": 64}
+		"L": {"numeric": 370, "alphanumeric": 224, "byte": 154, "maxCodewords": 156},
+		"M": {"numeric": 293, "alphanumeric": 178, "byte": 122, "maxCodewords": 124},
+		"Q": {"numeric": 207, "alphanumeric": 125, "byte": 86, "maxCodewords": 88},
+		"H": {"numeric": 154, "alphanumeric": 93, "byte": 64, "maxCodewords": 66}
 	},
 	"8": {
-		"L": {"numeric": 461, "alphanumeric": 279, "byte": 192},
-		"M": {"numeric": 365, "alphanumeric": 221, "byte": 152},
-		"Q": {"numeric": 259, "alphanumeric": 157, "byte": 108},
-		"H": {"numeric": 202, "alphanumeric": 122, "byte": 84}
+		"L": {"numeric": 461, "alphanumeric": 279, "byte": 192, "maxCodewords": 194},
+		"M": {"numeric": 365, "alphanumeric": 221, "byte": 152, "maxCodewords": 154},
+		"Q": {"numeric": 259, "alphanumeric": 157, "byte": 108, "maxCodewords": 110},
+		"H": {"numeric": 202, "alphanumeric": 122, "byte": 84, "maxCodewords": 86}
 	},
 	"9": {
-		"L": {"numeric": 552, "alphanumeric": 335, "byte": 230},
-		"M": {"numeric": 432, "alphanumeric": 262, "byte": 180},
-		"Q": {"numeric": 312, "alphanumeric": 189, "byte": 130},
-		"H": {"numeric": 235, "alphanumeric": 143, "byte": 98}
+		"L": {"numeric": 552, "alphanumeric": 335, "byte": 230, "maxCodewords": 232},
+		"M": {"numeric": 432, "alphanumeric": 262, "byte": 180, "maxCodewords": 182},
+		"Q": {"numeric": 312, "alphanumeric": 189, "byte": 130, "maxCodewords": 132},
+		"H": {"numeric": 235, "alphanumeric": 143, "byte": 98, "maxCodewords": 100}
 	},
 	"10": {
-		"L": {"numeric": 652, "alphanumeric": 395, "byte": 271},
-		"M": {"numeric": 513, "alphanumeric": 311, "byte": 213},
-		"Q": {"numeric": 364, "alphanumeric": 221, "byte": 151},
-		"H": {"numeric": 288, "alphanumeric": 174, "byte": 119}
+		"L": {"numeric": 652, "alphanumeric": 395, "byte": 271, "maxCodewords": 274},
+		"M": {"numeric": 513, "alphanumeric": 311, "byte": 213, "maxCodewords": 216},
+		"Q": {"numeric": 364, "alphanumeric": 221, "byte": 151, "maxCodewords": 154},
+		"H": {"numeric": 288, "alphanumeric": 174, "byte": 119, "maxCodewords": 122}
 	},
 	"11": {
-		"L": {"numeric": 772, "alphanumeric": 468, "byte": 321},
-		"M": {"numeric": 604, "alphanumeric": 366, "byte": 251},
-		"Q": {"numeric": 427, "alphanumeric": 259, "byte": 177},
-		"H": {"numeric": 331, "alphanumeric": 200, "byte": 137}
+		"L": {"numeric": 772, "alphanumeric": 468, "byte": 321, "maxCodewords": 324},
+		"M": {"numeric": 604, "alphanumeric": 366, "byte": 251, "maxCodewords": 254},
+		"Q": {"numeric": 427, "alphanumeric": 259, "byte": 177, "maxCodewords": 180},
+		"H": {"numeric": 331, "alphanumeric": 200, "byte": 137, "maxCodewords": 140}
 	},
 	"12": {
-		"L": {"numeric": 883, "alphanumeric": 535, "byte": 367},
-		"M": {"numeric": 691, "alphanumeric": 419, "byte": 287},
-		"Q": {"numeric": 489, "alphanumeric": 296, "byte": 203},
-		"H": {"numeric": 374, "alphanumeric": 227, "byte": 155}
+		"L": {"numeric": 883, "alphanumeric": 535, "byte": 367, "maxCodewords": 370},
+		"M": {"numeric": 691, "alphanumeric": 419, "byte": 287, "maxCodewords": 290},
+		"Q": {"numeric": 489, "alphanumeric": 296, "byte": 203, "maxCodewords": 206},
+		"H": {"numeric": 374, "alphanumeric": 227, "byte": 155, "maxCodewords": 158}
 	},
 	"13": {
-		"L": {"numeric": 1022, "alphanumeric": 619, "byte": 425},
-		"M": {"numeric": 796, "alphanumeric": 483, "byte": 331},
-		"Q": {"numeric": 580, "alphanumeric": 352, "byte": 241},
-		"H": {"numeric": 427, "alphanumeric": 259, "byte": 177}
+		"L": {"numeric": 1022, "alphanumeric": 619, "byte": 425, "maxCodewords": 428},
+		"M": {"numeric": 796, "alphanumeric": 483, "byte": 331, "maxCodewords": 334},
+		"Q": {"numeric": 580, "alphanumeric": 352, "byte": 241, "maxCodewords": 244},
+		"H": {"numeric": 427, "alphanumeric": 259, "byte": 177, "maxCodewords": 180}
 	},
 	"14": {
-		"L": {"numeric": 1101, "alphanumeric": 667, "byte": 458},
-		"M": {"numeric": 871, "alphanumeric": 528, "byte": 362},
-		"Q": {"numeric": 621, "alphanumeric": 376, "byte": 258},
-		"H": {"numeric": 468, "alphanumeric": 283, "byte": 194}
+		"L": {"numeric": 1101, "alphanumeric": 667, "byte": 458, "maxCodewords": 461},
+		"M": {"numeric": 871, "alphanumeric": 528, "byte": 362, "maxCodewords": 365},
+		"Q": {"numeric": 621, "alphanumeric": 376, "byte": 258, "maxCodewords": 261},
+		"H": {"numeric": 468, "alphanumeric": 283, "byte": 194, "maxCodewords": 197}
 	},
 	"15": {
-		"L": {"numeric": 1250, "alphanumeric": 758, "byte": 520},
-		"M": {"numeric": 991, "alphanumeric": 600, "byte": 412},
-		"Q": {"numeric": 703, "alphanumeric": 426, "byte": 292},
-		"H": {"numeric": 530, "alphanumeric": 321, "byte": 220}
+		"L": {"numeric": 1250, "alphanumeric": 758, "byte": 520, "maxCodewords": 523},
+		"M": {"numeric": 991, "alphanumeric": 600, "byte": 412, "maxCodewords": 415},
+		"Q": {"numeric": 703, "alphanumeric": 426, "byte": 292, "maxCodewords": 295},
+		"H": {"numeric": 530, "alphanumeric": 321, "byte": 220, "maxCodewords": 223}
 	},
 	"16": {
-		"L": {"numeric": 1408, "alphanumeric": 854, "byte": 586},
-		"M": {"numeric": 1082, "alphanumeric": 656, "byte": 450},
-		"Q": {"numeric": 775, "alphanumeric": 470, "byte": 322},
-		"H": {"numeric": 602, "alphanumeric": 365, "byte": 250}
+		"L": {"numeric": 1408, "alphanumeric": 854, "byte": 586, "maxCodewords": 589},
+		"M": {"numeric": 1082, "alphanumeric": 656, "byte": 450, "maxCodewords": 453},
+		"Q": {"numeric": 775, "alphanumeric": 470, "byte": 322, "maxCodewords": 325},
+		"H": {"numeric": 602, "alphanumeric": 365, "byte": 250, "maxCodewords": 253}
 	},
 	"17": {
-		"L": {"numeric": 1548, "alphanumeric": 938, "byte": 644},
-		"M": {"numeric": 1212, "alphanumeric": 734, "byte": 504},
-		"Q": {"numeric": 876, "alphanumeric": 531, "byte": 364},
-		"H": {"numeric": 674, "alphanumeric": 408, "byte": 280}
+		"L": {"numeric": 1548, "alphanumeric": 938, "byte": 644, "maxCodewords": 647},
+		"M": {"numeric": 1212, "alphanumeric": 734, "byte": 504, "maxCodewords": 507},
+		"Q": {"numeric": 876, "alphanumeric": 531, "byte": 364, "maxCodewords": 367},
+		"H": {"numeric": 674, "alphanumeric": 408, "byte": 280, "maxCodewords": 283}
 	},
 	"18": {
-		"L": {"numeric": 1725, "alphanumeric": 1046, "byte": 718},
-		"M": {"numeric": 1346, "alphanumeric": 816, "byte": 560},
-		"Q": {"numeric": 948, "alphanumeric": 574, "byte": 394},
-		"H": {"numeric": 746, "alphanumeric": 452, "byte": 310}
+		"L": {"numeric": 1725, "alphanumeric": 1046, "byte": 718, "maxCodewords": 721},
+		"M": {"numeric": 1346, "alphanumeric": 816, "byte": 560, "maxCodewords": 563},
+		"Q": {"numeric": 948, "alphanumeric": 574, "byte": 394, "maxCodewords": 397},
+		"H": {"numeric": 746, "alphanumeric": 452, "byte": 310, "maxCodewords": 313}
 	},
 	"19": {
-		"L": {"numeric": 1903, "alphanumeric": 1153, "byte": 792},
-		"M": {"numeric": 1500, "alphanumeric": 909, "byte": 624},
-		"Q": {"numeric": 1063, "alphanumeric": 644, "byte": 442},
-		"H": {"numeric": 813, "alphanumeric": 493, "byte": 338}
+		"L": {"numeric": 1903, "alphanumeric": 1153, "byte": 792, "maxCodewords": 795},
+		"M": {"numeric": 1500, "alphanumeric": 909, "byte": 624, "maxCodewords": 627},
+		"Q": {"numeric": 1063, "alphanumeric": 644, "byte": 442, "maxCodewords": 445},
+		"H": {"numeric": 813, "alphanumeric": 493, "byte": 338, "maxCodewords": 341}
 	},
 	"20": {
-		"L": {"numeric": 2061, "alphanumeric": 1249, "byte": 858},
-		"M": {"numeric": 1600, "alphanumeric": 970, "byte": 666},
-		"Q": {"numeric": 1159, "alphanumeric": 702, "byte": 482},
-		"H": {"numeric": 919, "alphanumeric": 557, "byte": 382}
+		"L": {"numeric": 2061, "alphanumeric": 1249, "byte": 858, "maxCodewords": 861},
+		"M": {"numeric": 1600, "alphanumeric": 970, "byte": 666, "maxCodewords": 669},
+		"Q": {"numeric": 1159, "alphanumeric": 702, "byte": 482, "maxCodewords": 485},
+		"H": {"numeric": 919, "alphanumeric": 557, "byte": 382, "maxCodewords": 385}
 	},
 	"21": {
-		"L": {"numeric": 2232, "alphanumeric": 1352, "byte": 929},
-		"M": {"numeric": 1708, "alphanumeric": 1035, "byte": 711},
-		"Q": {"numeric": 1224, "alphanumeric": 742, "byte": 509},
-		"H": {"numeric": 969, "alphanumeric": 587, "byte": 403}
+		"L": {"numeric": 2232, "alphanumeric": 1352, "byte": 929, "maxCodewords": 932},
+		"M": {"numeric": 1708, "alphanumeric": 1035, "byte": 711, "maxCodewords": 714},
+		"Q": {"numeric": 1224, "alphanumeric": 742, "byte": 509, "maxCodewords": 512},
+		"H": {"numeric": 969, "alphanumeric": 587, "byte": 403, "maxCodewords": 406}
 	},
 	"22": {
-		"L": {"numeric": 2409, "alphanumeric": 1460, "byte": 1003},
-		"M": {"numeric": 1872, "alphanumeric": 1134, "byte": 779},
-		"Q": {"numeric": 1358, "alphanumeric": 823, "byte": 565},
-		"H": {"numeric": 1056, "alphanumeric": 640, "byte": 439}
+		"L": {"numeric": 2409, "alphanumeric": 1460, "byte": 1003, "maxCodewords": 1006},
+		"M": {"numeric": 1872, "alphanumeric": 1134, "byte": 779, "maxCodewords": 782},
+		"Q": {"numeric": 1358, "alphanumeric": 823, "byte": 565, "maxCodewords": 568},
+		"H": {"numeric": 1056, "alphanumeric": 640, "byte": 439, "maxCodewords": 442}
 	},
 	"23": {
-		"L": {"numeric": 2620, "alphanumeric": 1588, "byte": 1091},
-		"M": {"numeric": 2059, "alphanumeric": 1248, "byte": 857},
-		"Q": {"numeric": 1468, "alphanumeric": 890, "byte": 611},
-		"H": {"numeric": 1108, "alphanumeric": 672, "byte": 461}
+		"L": {"numeric": 2620, "alphanumeric": 1588, "byte": 1091, "maxCodewords": 1094},
+		"M": {"numeric": 2059, "alphanumeric": 1248, "byte": 857, "maxCodewords": 860},
+		"Q": {"numeric": 1468, "alphanumeric": 890, "byte": 611, "maxCodewords": 614},
+		"H": {"numeric": 1108, "alphanumeric": 672, "byte": 461, "maxCodewords": 464}
 	},
 	"24": {
-		"L": {"numeric": 2812, "alphanumeric": 1704, "byte": 1171},
-		"M": {"numeric": 2188, "alphanumeric": 1326, "byte": 911},
-		"Q": {"numeric": 1588, "alphanumeric": 963, "byte": 661},
-		"H": {"numeric": 1228, "alphanumeric": 744, "byte": 511}
+		"L": {"numeric": 2812, "alphanumeric": 1704, "byte": 1171, "maxCodewords": 1174},
+		"M": {"numeric": 2188, "alphanumeric": 1326, "byte": 911, "maxCodewords": 914},
+		"Q": {"numeric": 1588, "alphanumeric": 963, "byte": 661, "maxCodewords": 664},
+		"H": {"numeric": 1228, "alphanumeric": 744, "byte": 511, "maxCodewords": 514}
 	},
 	"25": {
-		"L": {"numeric": 3057, "alphanumeric": 1853, "byte": 1273},
-		"M": {"numeric": 2395, "alphanumeric": 1451, "byte": 997},
-		"Q": {"numeric": 1718, "alphanumeric": 1041, "byte": 715},
-		"H": {"numeric": 1286, "alphanumeric": 779, "byte": 535}
+		"L": {"numeric": 3057, "alphanumeric": 1853, "byte": 1273, "maxCodewords": 1276},
+		"M": {"numeric": 2395, "alphanumeric": 1451, "byte": 997, "maxCodewords": 1000},
+		"Q": {"numeric": 1718, "alphanumeric": 1041, "byte": 715, "maxCodewords": 718},
+		"H": {"numeric": 1286, "alphanumeric": 779, "byte": 535, "maxCodewords": 538}
 	},
 	"26": {
-		"L": {"numeric": 3283, "alphanumeric": 1990, "byte": 1367},
-		"M": {"numeric": 2544, "alphanumeric": 1542, "byte": 1059},
-		"Q": {"numeric": 1804, "alphanumeric": 1094, "byte": 751},
-		"H": {"numeric": 1425, "alphanumeric": 864, "byte": 593}
+		"L": {"numeric": 3283, "alphanumeric": 1990, "byte": 1367, "maxCodewords": 1370},
+		"M": {"numeric": 2544, "alphanumeric": 1542, "byte": 1059, "maxCodewords": 1062},
+		"Q": {"numeric": 1804, "alphanumeric": 1094, "byte": 751, "maxCodewords": 754},
+		"H": {"numeric": 1425, "alphanumeric": 864, "byte": 593, "maxCodewords": 596}
 	},
 	"27": {
-		"L": {"numeric": 3517, "alphanumeric": 2132, "byte": 1465},
-		"M": {"numeric": 2701, "alphanumeric": 1637, "byte": 1125},
-		"Q": {"numeric": 1933, "alphanumeric": 1172, "byte": 805},
-		"H": {"numeric": 1501, "alphanumeric": 910, "byte": 625}
+		"L": {"numeric": 3517, "alphanumeric": 2132, "byte": 1465, "maxCodewords": 1468},
+		"M": {"numeric": 2701, "alphanumeric": 1637, "byte": 1125, "maxCodewords": 1128},
+		"Q": {"numeric": 1933, "alphanumeric": 1172, "byte": 805, "maxCodewords": 808},
+		"H": {"numeric": 1501, "alphanumeric": 910, "byte": 625, "maxCodewords": 628}
 	},
 	"28": {
-		"L": {"numeric": 3669, "alphanumeric": 2223, "byte": 1528},
-		"M": {"numeric": 2857, "alphanumeric": 1732, "byte": 1190},
-		"Q": {"numeric": 2085, "alphanumeric": 1263, "byte": 868},
-		"H": {"numeric": 1581, "alphanumeric": 958, "byte": 658}
+		"L": {"numeric": 3669, "alphanumeric": 2223, "byte": 1528, "maxCodewords": 1531},
+		"M": {"numeric": 2857, "alphanumeric": 1732, "byte": 1190, "maxCodewords": 1193},
+		"Q": {"numeric": 2085, "alphanumeric": 1263, "byte": 868, "maxCodewords": 871},
+		"H": {"numeric": 1581, "alphanumeric": 958, "byte": 658, "maxCodewords": 661}
 	},
 	"29": {
-		"L": {"numeric": 3909, "alphanumeric": 2369, "byte": 1628},
-		"M": {"numeric": 3035, "alphanumeric": 1839, "byte": 1264},
-		"Q": {"numeric": 2181, "alphanumeric": 1322, "byte": 908},
-		"H": {"numeric": 1677, "alphanumeric": 1016, "byte": 698}
+		"L": {"numeric": 3909, "alphanumeric": 2369, "byte": 1628, "maxCodewords": 1631},
+		"M": {"numeric": 3035, "alphanumeric": 1839, "byte": 1264, "maxCodewords": 1267},
+		"Q": {"numeric": 2181, "alphanumeric": 1322, "byte": 908, "maxCodewords": 911},
+		"H": {"numeric": 1677, "alphanumeric": 1016, "byte": 698, "maxCodewords": 701}
 	},
 	"30": {
-		"L": {"numeric": 4158, "alphanumeric": 2520, "byte": 1732},
-		"M": {"numeric": 3289, "alphanumeric": 1994, "byte": 1370},
-		"Q": {"numeric": 2358, "alphanumeric": 1429, "byte": 982},
-		"H": {"numeric": 1782, "alphanumeric": 1080, "byte": 742}
+		"L": {"numeric": 4158, "alphanumeric": 2520, "byte": 1732, "maxCodewords": 1735},
+		"M": {"numeric": 3289, "alphanumeric": 1994, "byte": 1370, "maxCodewords": 1373},
+		"Q": {"numeric": 2358, "alphanumeric": 1429, "byte": 982, "maxCodewords": 985},
+		"H": {"numeric": 1782, "alphanumeric": 1080, "byte": 742, "maxCodewords": 745}
 	},
 	"31": {
-		"L": {"numeric": 4417, "alphanumeric": 2677, "byte": 1840},
-		"M": {"numeric": 3486, "alphanumeric": 2113, "byte": 1452},
-		"Q": {"numeric": 2473, "alphanumeric": 1499, "byte": 1030},
-		"H": {"numeric": 1897, "alphanumeric": 1150, "byte": 790}
+		"L": {"numeric": 4417, "alphanumeric": 2677, "byte": 1840, "maxCodewords": 1843},
+		"M": {"numeric": 3486, "alphanumeric": 2113, "byte": 1452, "maxCodewords": 1455},
+		"Q": {"numeric": 2473, "alphanumeric": 1499, "byte": 1030, "maxCodewords": 1033},
+		"H": {"numeric": 1897, "alphanumeric": 1150, "byte": 790, "maxCodewords": 793}
 	},
 	"32": {
-		"L": {"numeric": 4686, "alphanumeric": 2840, "byte": 1952},
-		"M": {"numeric": 3693, "alphanumeric": 2238, "byte": 1538},
-		"Q": {"numeric": 2670, "alphanumeric": 1618, "byte": 1112},
-		"H": {"numeric": 2022, "alphanumeric": 1226, "byte": 842}
+		"L": {"numeric": 4686, "alphanumeric": 2840, "byte": 1952, "maxCodewords": 1955},
+		"M": {"numeric": 3693, "alphanumeric": 2238, "byte": 1538, "maxCodewords": 1541},
+		"Q": {"numeric": 2670, "alphanumeric": 1618, "byte": 1112, "maxCodewords": 1115},
+		"H": {"numeric": 2022, "alphanumeric": 1226, "byte": 842, "maxCodewords": 845}
 	},
 	"33": {
-		"L": {"numeric": 4965, "alphanumeric": 3009, "byte": 2068},
-		"M": {"numeric": 3909, "alphanumeric": 2369, "byte": 1628},
-		"Q": {"numeric": 2805, "alphanumeric": 1700, "byte": 1168},
-		"H": {"numeric": 2157, "alphanumeric": 1307, "byte": 898}
+		"L": {"numeric": 4965, "alphanumeric": 3009, "byte": 2068, "maxCodewords": 2071},
+		"M": {"numeric": 3909, "alphanumeric": 2369, "byte": 1628, "maxCodewords": 1631},
+		"Q": {"numeric": 2805, "alphanumeric": 1700, "byte": 1168, "maxCodewords": 1171},
+		"H": {"numeric": 2157, "alphanumeric": 1307, "byte": 898, "maxCodewords": 901}
 	},
 	"34": {
-		"L": {"numeric": 5253, "alphanumeric": 3183, "byte": 2188},
-		"M": {"numeric": 4134, "alphanumeric": 2506, "byte": 1722},
-		"Q": {"numeric": 2949, "alphanumeric": 1787, "byte": 1228},
-		"H": {"numeric": 2301, "alphanumeric": 1394, "byte": 958}
+		"L": {"numeric": 5253, "alphanumeric": 3183, "byte": 2188, "maxCodewords": 2191},
+		"M": {"numeric": 4134, "alphanumeric": 2506, "byte": 1722, "maxCodewords": 1725},
+		"Q": {"numeric": 2949, "alphanumeric": 1787, "byte": 1228, "maxCodewords": 1231},
+		"H": {"numeric": 2301, "alphanumeric": 1394, "byte": 958, "maxCodewords": 961}
 	},
 	"35": {
-		"L": {"numeric": 5529, "alphanumeric": 3351, "byte": 2303},
-		"M": {"numeric": 4343, "alphanumeric": 2632, "byte": 1809},
-		"Q": {"numeric": 3081, "alphanumeric": 1867, "byte": 1283},
-		"H": {"numeric": 2361, "alphanumeric": 1431, "byte": 983}
+		"L": {"numeric": 5529, "alphanumeric": 3351, "byte": 2303, "maxCodewords": 2306},
+		"M": {"numeric": 4343, "alphanumeric": 2632, "byte": 1809, "maxCodewords": 1812},
+		"Q": {"numeric": 3081, "alphanumeric": 1867, "byte": 1283, "maxCodewords": 1286},
+		"H": {"numeric": 2361, "alphanumeric": 1431, "byte": 983, "maxCodewords": 986}
 	},
 	"36": {
-		"L": {"numeric": 5836, "alphanumeric": 3537, "byte": 2431},
-		"M": {"numeric": 4588, "alphanumeric": 2780, "byte": 1911},
-		"Q": {"numeric": 3244, "alphanumeric": 1966, "byte": 1351},
-		"H": {"numeric": 2524, "alphanumeric": 1530, "byte": 1051}
+		"L": {"numeric": 5836, "alphanumeric": 3537, "byte": 2431, "maxCodewords": 2434},
+		"M": {"numeric": 4588, "alphanumeric": 2780, "byte": 1911, "maxCodewords": 1914},
+		"Q": {"numeric": 3244, "alphanumeric": 1966, "byte": 1351, "maxCodewords": 1354},
+		"H": {"numeric": 2524, "alphanumeric": 1530, "byte": 1051, "maxCodewords": 1054}
 	},
 	"37": {
-		"L": {"numeric": 6153, "alphanumeric": 3729, "byte": 2563},
-		"M": {"numeric": 4775, "alphanumeric": 2894, "byte": 1989},
-		"Q": {"numeric": 3417, "alphanumeric": 2071, "byte": 1423},
-		"H": {"numeric": 2625, "alphanumeric": 1591, "byte": 1093}
+		"L": {"numeric": 6153, "alphanumeric": 3729, "byte": 2563, "maxCodewords": 2566},
+		"M": {"numeric": 4775, "alphanumeric": 2894, "byte": 1989, "maxCodewords": 1992},
+		"Q": {"numeric": 3417, "alphanumeric": 2071, "byte": 1423, "maxCodewords": 1426},
+		"H": {"numeric": 2625, "alphanumeric": 1591, "byte": 1093, "maxCodewords": 1096}
 	},
 	"38": {
-		"L": {"numeric": 6479, "alphanumeric": 3927, "byte": 2699},
-		"M": {"numeric": 5039, "alphanumeric": 3054, "byte": 2099},
-		"Q": {"numeric": 3599, "alphanumeric": 2181, "byte": 1499},
-		"H": {"numeric": 2735, "alphanumeric": 1658, "byte": 1139}
+		"L": {"numeric": 6479, "alphanumeric": 3927, "byte": 2699, "maxCodewords": 2702},
+		"M": {"numeric": 5039, "alphanumeric": 3054, "byte": 2099, "maxCodewords": 2102},
+		"Q": {"numeric": 3599, "alphanumeric": 2181, "byte": 1499, "maxCodewords": 1502},
+		"H": {"numeric": 2735, "alphanumeric": 1658, "byte": 1139, "maxCodewords": 1142}
 	},
 	"39": {
-		"L": {"numeric": 6743, "alphanumeric": 4087, "byte": 2809},
-		"M": {"numeric": 5313, "alphanumeric": 3220, "byte": 2213},
-		"Q": {"numeric": 3791, "alphanumeric": 2298, "byte": 1579},
-		"H": {"numeric": 2927, "alphanumeric": 1774, "byte": 1219}
+		"L": {"numeric": 6743, "alphanumeric": 4087, "byte": 2809, "maxCodewords": 2812},
+		"M": {"numeric": 5313, "alphanumeric": 3220, "byte": 2213, "maxCodewords": 2216},
+		"Q": {"numeric": 3791, "alphanumeric": 2298, "byte": 1579, "maxCodewords": 1582},
+		"H": {"numeric": 2927, "alphanumeric": 1774, "byte": 1219, "maxCodewords": 1222}
 	},
 	"40": {
-		"L": {"numeric": 7089, "alphanumeric": 4296, "byte": 2953},
-		"M": {"numeric": 5596, "alphanumeric": 3391, "byte": 2331},
-		"Q": {"numeric": 3993, "alphanumeric": 2420, "byte": 1663},
-		"H": {"numeric": 3057, "alphanumeric": 1852, "byte": 1273}
+		"L": {"numeric": 7089, "alphanumeric": 4296, "byte": 2953, "maxCodewords": 2956},
+		"M": {"numeric": 5596, "alphanumeric": 3391, "byte": 2331, "maxCodewords": 2334},
+		"Q": {"numeric": 3993, "alphanumeric": 2420, "byte": 1663, "maxCodewords": 1666},
+		"H": {"numeric": 3057, "alphanumeric": 1852, "byte": 1273, "maxCodewords": 1276}
 	}
 }

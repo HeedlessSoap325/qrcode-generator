@@ -120,12 +120,14 @@ function determinQRCodeInfo() {
 
 	for(let i = 1; i <= 40; i++) {
 		const limit = capacities[`${i}`][errorCorrection][encoding];
+		const maxCodewords = capacities[`${i}`][errorCorrection]["maxCodewords"];
 		if(limit >= input.length) {
 			return {
 				version: i,
 				encoding,
-				limit: limit,
-				errorCorrection
+				limit,
+				errorCorrection,
+				maxCodewords,
 			};
 		}
 	}
@@ -133,7 +135,8 @@ function determinQRCodeInfo() {
 		version: 40,
 		encoding,
 		limit: capacities["40"][errorCorrection][encoding],
-		errorCorrection
+		errorCorrection,
+		maxCodewords: capacities["40"][errorCorrection]["maxCodewords"],
 	};
 }
 
@@ -219,9 +222,8 @@ function encodeData(info) {
 	const pad = intToBitsFixed(0, padLen);
 	ret = [...ret, ...pad]; // The Bit stream must be padded, so that the Extension boundaries allign with the codeword boundaries
 
-	const numCodewords = ret / 8; //This should be an integer
-	const maxCodewords = 0; //TODO
-	for(let it = 0; it < (maxCodewords - numCodewords); it++) {
+	const numCodewords = ret.length / 8; //This should be an integer
+	for(let it = 0; it < (info.maxCodewords - numCodewords); it++) {
 		if (it % 2 === 0) { // Alternate extension codewords
 			ret = [...ret, ...dataExtension1]; // Extend with 236, as specified in ISO
 		} else {
