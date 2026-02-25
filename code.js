@@ -129,7 +129,57 @@ function determinQRCodeInfo() {
 	};
 }
 
-function encodeData(info) {}
+/*
+	encode the data in inputData.value, based on the encoding mode.
+	returns a list, which contains each codeword(8 bit, most significant bit first) as a list.
+	return = [
+		[0,0,0,1,0,0,0,0], //mode indicator + 4 most significat bits of character count indicator
+		[0,0,1,0,0,0,0,0], //character count indicator + 2 most significant bits of the first data segment
+		[0,0,0,0,1,1,0,0], //data
+		[0,1,0,1,0,1,1,0],
+		[0,1,1,0,0,0,0,1],
+		...
+	]
+*/
+function encodeData(info) {
+	let ret = [];
+	if(info.encoding === "numeric") {
+		const mode 	= intToBitsFixed(1, 4); // 0001 is the mode indicator for numbers
+		const len 	= intToBitsFixed(inputData.value.length, 10); // character count indicator must be 10 bits
+		const parts = inputData.value.match(/.{1,3}/g) || []; // split input stream every 3 characters
+
+		ret = [...ret, ...mode, ...len];
+
+		parts.forEach(part => {
+			const num = parseInt(part, 10);
+			let len = 10;
+			if(part.length === 1) len = 4;
+			else if (part.length === 2) len = 7;
+
+			const bin = intToBitsFixed(num, len);
+			ret = [...ret, ...bin];
+		});
+	} else if(info.encoding === "alphanumeric") {
+
+	} else { // info.encodeing === "byte"
+
+	}
+	ret = [...ret, 0, 0, 0, 0]; // Terminator for all QR code bit streams
+	const padLen = 8 - (ret.length % 8); // Codewords are 8 Bit long
+	const pad = intToBitsFixed(0, padLen);
+	ret = [...ret, pad]; // The Bit stream must be padded, so that the Extension boundaries allign with the codeword boundaries
+
+	const numCodewords = ret / 8; //This should be an integer
+	const maxCodewords = 0; //TODO
+	for(let it = 0; it < (maxCodewords - numCodewords); it++) {
+		if (it % 2 === 0) { // Alternate extension codewords
+			ret = [...ret, 1, 1, 1, 0, 1, 1, 0, 0]; // Extend with 236, as specified in ISO
+		} else {
+			ret = [...ret, 0, 0, 0, 1, 0, 0, 0, 1]; // Extend with 17, as specified in ISO
+		}
+	}
+	return ret;
+}
 
 function intToBits(n) {
     return n.toString(2).split('').map(Number);
