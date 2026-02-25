@@ -32,6 +32,14 @@ const formatInformationMask = 0b101010000010010;
 const formatInformationGenerator = 0b10100110111;
 const versionInformationGenerator = 0b1111100100101;
 
+const dataExtension1 = [1, 1, 1, 0, 1, 1, 0, 0];
+const dataExtension2 = [0, 0, 0, 1, 0, 0, 0, 1];
+const alphanumerics = [
+	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 
+	" ", "$", "%", "*", "+", "-", ".", "/", ":"
+];
+
 function drawQrCode(qrcode, qrcodeDimensions) {
 	for (let it = 0; it < (qrcodeDimensions * qrcodeDimensions); it++) {
 		const color = (qrcode[it] & PIXEL_BLACK_FLAG) ? "black" : "white";
@@ -142,6 +150,10 @@ function determinQRCodeInfo() {
 	]
 */
 function encodeData(info) {
+	// Version    Numeric   Alphanumeric   byte
+	// 1  to 9    10        9              8
+	// 10 to 26   12        11             16
+	// 27 to 40   14        13             16
 	let ret = [];
 	if(info.encoding === "numeric") {
 		const mode 	= intToBitsFixed(1, 4); // 0001 is the mode indicator for numbers
@@ -160,22 +172,42 @@ function encodeData(info) {
 			ret = [...ret, ...bin];
 		});
 	} else if(info.encoding === "alphanumeric") {
+		const mode 	= intToBitsFixed(2, 4); // 0010 is the mode indicator for numbers
+		const len 	= intToBitsFixed(inputData.value.length, 9); // character count indicator must be 10 bits
+		const parts = inputData.value.match(/.{1,2}/g) || []; // split input stream every 3 characters
 
+		ret = [...ret, ...mode, ...len];
+
+		parts.forEach(part => {
+			if(part.length === 1) {
+				const charValue = alphanumerics.indexOf(part);
+				const bin 		= intToBitsFixed(charValue, 6);
+
+				ret = [...ret, ...bin];
+			} else { //part.length === 2
+				const char1Value = alphanumerics.indexOf(part[0]);
+				const char2Value = alphanumerics.indexOf(part[1]);
+				const num 		 = (alphanumerics.length * char1Value)+ char2Value;
+				const bin 		 = intToBitsFixed(num, 11);
+
+				ret = [...ret, ...bin];
+			}
+		});
 	} else { // info.encodeing === "byte"
 
 	}
 	ret = [...ret, 0, 0, 0, 0]; // Terminator for all QR code bit streams
 	const padLen = 8 - (ret.length % 8); // Codewords are 8 Bit long
 	const pad = intToBitsFixed(0, padLen);
-	ret = [...ret, pad]; // The Bit stream must be padded, so that the Extension boundaries allign with the codeword boundaries
+	ret = [...ret, ...pad]; // The Bit stream must be padded, so that the Extension boundaries allign with the codeword boundaries
 
 	const numCodewords = ret / 8; //This should be an integer
 	const maxCodewords = 0; //TODO
 	for(let it = 0; it < (maxCodewords - numCodewords); it++) {
 		if (it % 2 === 0) { // Alternate extension codewords
-			ret = [...ret, 1, 1, 1, 0, 1, 1, 0, 0]; // Extend with 236, as specified in ISO
+			ret = [...ret, ...dataExtension1]; // Extend with 236, as specified in ISO
 		} else {
-			ret = [...ret, 0, 0, 0, 1, 0, 0, 0, 1]; // Extend with 17, as specified in ISO
+			ret = [...ret, ...dataExtension2]; // Extend with 17, as specified in ISO
 		}
 	}
 	return ret;
@@ -316,6 +348,7 @@ function generate() {
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern); // Top left to Top right
 
 	//TODO: Encode Data & determin Mask
+	console.log(encodeData(info));
 
 	setFormatInformation(info.version, qrcode, qrcodeDimensions, info.errorCorrection, 1); //TODO: replace "1" with actual Mask
 
