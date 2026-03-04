@@ -64,7 +64,7 @@ function drawQrCode(qrcode, qrcodeDimensions) {
 		y: 4, x: 2 to 1
 		y: 4, x: 3 to 1
 */
-function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data) {
+function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data, flags = 0) {
 	for (let it = 0; it < w * h; it++) {
 		const rowOffset = Math.floor(it / w);
 		const colOffset = it % w;
@@ -73,7 +73,7 @@ function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data) {
 			console.warn(`setQrCodeArea: Function tried setting reserved pixel (x=${x + colOffset}, y=${y + rowOffset}) to ${data[it]}`);
 		} else {
 			const color = data[it] === 0 ? 0 : 1;
-			qrcode[index] = color | PIXEL_RESERVED_FLAG;
+			qrcode[index] = color | flags;
 		}
 	}
 }
@@ -99,7 +99,7 @@ function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
 		const x = allPairs[it][0]; // Center x
 		const y = allPairs[it][1]; // Center y
 		if ((x <= 7 && (y <= 7 || y >= (qrcodeDimensions - 8))) || (x >= (qrcodeDimensions - 8) && y <= 7)) continue; // Don't place inside finder Patterns
-		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, alignmentPattern);
+		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, alignmentPattern, PIXEL_RESERVED_FLAG);
 	}
 }
 
@@ -304,14 +304,14 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 	const info2 = info.slice(7, 15).reverse()
 	info2.splice(6, 0, 1);
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 8, 1, info1); // Left to right
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 8, 1, info1, PIXEL_RESERVED_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2, PIXEL_RESERVED_FLAG); // Top to bottom
 
 	const info3 = info.slice(0, 7).reverse();
 	info3.splice(0, 0, 1);
 	const info4 = info.slice(7, 15);
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, (qrcodeDimensions - 8), 1, 8, info3); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 8, 8, 1, info4); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, (qrcodeDimensions - 8), 1, 8, info3, PIXEL_RESERVED_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 8, 8, 1, info4, PIXEL_RESERVED_FLAG); // Left to right
 
 
 	if(qrcodeVersion > 6) { // Version Information is required for all QR codes over version 6
@@ -335,8 +335,8 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 			data1[(i % 3) * 6 + Math.floor(i / 3)] = data[i];
 		}
 
-		setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 11), 0, 3, 6, data); //Top right
-		setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 11), 6, 3, data1); //Bottom left
+		setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 11), 0, 3, 6, data, PIXEL_RESERVED_FLAG); //Top right
+		setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 11), 6, 3, data1, PIXEL_RESERVED_FLAG); //Bottom left
 	}
 }
 
@@ -350,22 +350,22 @@ function generate() {
 	const timingPatternLen = qrcodeDimensions - 16;
 	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, finderPattern); // Top left
-	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 7, 8, 1, finderSeperator); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, finderPattern, PIXEL_RESERVED_FLAG); // Top left
+	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 7, 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
 
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, finderPattern); // Top right
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 0, 1, 8, finderSeperator); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 7, 8, 1, finderSeperator); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, finderPattern, PIXEL_RESERVED_FLAG); // Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 0, 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 7, 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, finderPattern); // Bottom left
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator); // Left to right
-	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, finderPattern, PIXEL_RESERVED_FLAG); // Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
 
 	setAlignmentPatterns(qrcode, info.version, qrcodeDimensions);
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern); // Top left to Bottom left
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern); // Top left to Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Top right
 
 	//TODO: Encode Data & determin Mask
 	console.log(encodeData(info));
