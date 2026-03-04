@@ -9,6 +9,7 @@ const pixelsize = 8;
 
 const PIXEL_BLACK_FLAG 		= 0b1;
 const PIXEL_RESERVED_FLAG 	= 0b10;
+const PIXEL_DATA_FLAG 		= 0b100;
 
 const finderPattern = [
 	1, 1, 1, 1, 1, 1, 1,
@@ -233,6 +234,36 @@ function encodeData(info) {
 	return ret;
 }
 
+function placeDataInQrCode(qrcode, qrcodeDimensions, data) {
+	let dataIdx = 0;
+	let encounteredTimingPattern = false;
+
+	for(let currentCol = 0; currentCol < qrcodeDimensions; currentCol += 2) {
+		for(let rowIter = 0; rowIter < qrcodeDimensions; rowIter++) {
+			if (currentCol === (qrcodeDimensions - 7)) {
+				encounteredTimingPattern = true;
+				currentCol++;
+			}
+			const dir = ((currentCol - (encounteredTimingPattern ? 1 : 0)) / 2) % 2; // 0 = upwards, 1 = downwards
+			const currentRow = (dir === 0 ? rowIter : (qrcodeDimensions - rowIter - 1));
+			const qrX = (qrcodeDimensions - currentCol - 1);
+			const qrY = (qrcodeDimensions - currentRow - 1);
+
+			if (!(qrcode[(qrY * qrcodeDimensions) + qrX] & PIXEL_RESERVED_FLAG)) {
+				setQrCodeArea(qrcode, qrcodeDimensions, qrX, qrY, 1, 1, [data[dataIdx]], PIXEL_DATA_FLAG);
+				dataIdx++;
+			}
+			if (!(qrcode[(qrY * qrcodeDimensions) + qrX - 1] & PIXEL_RESERVED_FLAG)) {
+				setQrCodeArea(qrcode, qrcodeDimensions, qrX - 1, qrY, 1, 1, [data[dataIdx]], PIXEL_DATA_FLAG);
+				dataIdx++;
+			}
+			
+			if (dataIdx >= data.length) break;
+		}
+		if (dataIdx >= data.length) break;
+	}
+}
+
 function intToBits(n) {
     return n.toString(2).split('').map(Number);
 }
@@ -368,11 +399,12 @@ function generate() {
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Top right
 
 	//TODO: Encode Data & determin Mask
-	console.log(encodeData(info));
+	const data = encodeData(info);
 
 	setFormatInformation(info.version, qrcode, qrcodeDimensions, info.errorCorrection, 1); //TODO: replace "1" with actual Mask
 
 	//TODO: Set Data to QR Code
+	placeDataInQrCode(qrcode, qrcodeDimensions, data);
 
 	console.groupEnd();
 
