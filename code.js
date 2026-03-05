@@ -335,7 +335,7 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 	const info2 = info.slice(7, 15).reverse()
 	info2.splice(6, 0, 1);
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 8, 1, info1, PIXEL_RESERVED_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 9, 1, info1, PIXEL_RESERVED_FLAG); // Left to right
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2, PIXEL_RESERVED_FLAG); // Top to bottom
 
 	const info3 = info.slice(0, 7).reverse();
