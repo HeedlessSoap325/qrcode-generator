@@ -218,8 +218,11 @@ function encodeData(info) {
 			ret = [...ret, ...bin];
 		}
 	}
-	ret = [...ret, 0, 0, 0, 0]; // Terminator for all QR code bit streams
-	const padLen = 8 - (ret.length % 8); // Codewords are 8 Bit long
+	const remainingBits = info.maxCodewords * 8 - ret.length;
+	const terminatorLen = Math.min(4, remainingBits); // Terminator is max. 4 Bits of 0s
+	ret = [...ret, ...Array(terminatorLen).fill(0)];
+
+	const padLen = (8 - (ret.length % 8)) % 8; // Codewords are 8 Bit long
 	const pad = intToBitsFixed(0, padLen);
 	ret = [...ret, ...pad]; // The Bit stream must be padded, so that the Extension boundaries allign with the codeword boundaries
 
@@ -232,6 +235,33 @@ function encodeData(info) {
 		}
 	}
 	return ret;
+}
+
+function maskQrCode(qrcode, qrcodeDimensions, maskIndex) {
+	if (maskIndex < 0 || maskIndex > 7) {
+		console.error(`maskQrCode: invalide maskindex '${maskIndex}' provided. Must be from 0 to 7!`);
+		return;
+	}
+	for (let i = 0; i < qrcodeDimensions; i++) {
+		for (let j = 0; j < qrcodeDimensions; j++) {
+			const qrIndex = (j * qrcodeDimensions) + i;
+			if (qrcode[qrIndex] & PIXEL_RESERVED_FLAG) continue;
+
+			let res = 0;
+			switch (maskIndex) {
+				case 0: res = (i + j) % 2; 									break;
+				case 1: res = j % 2; /* ISO specified i%2 (wrong pattern) */break;
+				case 2: res = i % 3; /* ISO specified j%3 (wrong pattern) */break;
+				case 3: res = (i + j) % 3;									break;
+				case 4: res = (Math.floor(i / 3) + Math.floor(j / 2)) % 2;	break;
+				case 5: res = (i * j) % 2 + (i * j) % 3; 					break;
+				case 6: res = ((i * j) % 2 + (i * j) % 3) % 2; 				break;
+				case 7: res = ((i + /* not '*' */ j) % 2 + (i * j) % 3) % 2;break;
+			}
+
+			if (res == 0) qrcode[qrIndex] ^= 1;
+		}
+	}
 }
 
 function placeDataInQrCode(qrcode, qrcodeDimensions, data) {
@@ -398,13 +428,17 @@ function generate() {
 	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Bottom left
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Top right
 
-	//TODO: Encode Data & determin Mask
+	//TODO: Encode Data ( + error correction) & determin Mask
 	const data = encodeData(info);
 
-	setFormatInformation(info.version, qrcode, qrcodeDimensions, info.errorCorrection, 1); //TODO: replace "1" with actual Mask
+	const maskIndex = 0;
+
+	setFormatInformation(info.version, qrcode, qrcodeDimensions, info.errorCorrection, maskIndex); //TODO: replace "1" with actual Mask
 
 	//TODO: Set Data to QR Code
 	placeDataInQrCode(qrcode, qrcodeDimensions, data);
+
+	maskQrCode(qrcode, qrcodeDimensions, maskIndex);
 
 	console.groupEnd();
 
