@@ -264,6 +264,86 @@ function maskQrCode(qrcode, qrcodeDimensions, maskIndex) {
 	}
 }
 
+function evaluateMaskScore(qrcode, qrcodeDimensions) {
+	function get(y,x) { return qrcode[y * qrcodeDimensions + x] & PIXEL_BLACK_FLAG; }
+	let score = 0;
+
+	// Rule 1
+	function scan(map) { // map is a function, mapping i and j to x and y
+		for (let i = 0; i < qrcodeDimensions; i++) {
+			let run = 1;
+			for (let j = 1; j < qrcodeDimensions; j++) {
+				if (get(...map(i, j)) === get(...map(i, j-1))) { // check adjacent modules
+					run++;
+				} else {
+					if (run >= 5) score += 3 + run - 5; // Add penalty of N1 (3) + i (run - 5)
+					run = 1;
+				}
+			}
+			if (run >= 5) score += 3 + run - 5; // Add penalty of N1 (3) + i (run - 5)
+		}
+	}
+
+	scan((r, c)=>[r, c]); // rows (normal)
+	scan((c, r)=>[r, c]); // columns (flip rows and columns)
+
+	// Rule 2
+	for (let r = 0; r < (qrcodeDimensions - 1); r++) {
+		for (let c = 0; c < (qrcodeDimensions - 1); c++) {
+			/* 
+				Chech for 2x2 blocks
+				ISO specifies the penalty of a block of m*n should be N2(3) * (m - 1) * (n - 1) 
+				By always checking to the right and bottom, we effectively ignore one col and row of the block, achieving the same result
+			*/
+			const v = get(r, c);
+			if (v === get(r, c + 1) && v ===get(r + 1, c) && v === get(r + 1, c + 1)) score += 3; 
+		}
+	}
+
+	// Rule 3
+	const pattern = [1,0,1,1,1,0,1,0,0,0,0];
+
+	function check(map) { // map is a function, mapping i and j to x and y
+		for (let i = 0; i < qrcodeDimensions; i++) {
+			for (let j = 0; j <= (qrcodeDimensions - 11); j++){
+				let k = 0;
+				for (; k < 11 && get(...map(i, j + k)) === pattern[k]; k++); // Check, if the pattern exists
+				if (k === 11) score += 40; // Add penalty of N3 (40)
+			}
+		}
+	}
+
+	check((r, c)=>[r, c]); // rows (normal)
+	check((c, r)=>[r, c]); // columns (flip rows and columns)
+
+	// Rule 4
+	const dark = qrcode.reduce((a,b) => a + b, 0);
+	score += Math.floor(Math.abs((dark / qrcode.length) * 100 - 50) / 5) * 10; // calculate k (see ISO) and multiply by N4 (10)
+
+	return score;
+}
+
+function determinMask(qrcode, qrcodeDimensions, qrcodeVersion, errorCorrection, data) {
+	let bestMask = 0;
+	let bestScore = Infinity;
+
+	for (let mask = 0; mask < 8; mask++) {
+		const dummy = qrcode.slice();
+		setFormatInformation(qrcodeVersion, dummy, qrcodeDimensions, errorCorrection, mask); // Reserve space for version information
+		placeDataInQrCode(dummy, qrcodeDimensions, data);
+
+		maskQrCode(dummy, qrcodeDimensions, mask);
+		const maskScore = evaluateMaskScore(dummy, qrcodeDimensions);
+		
+		if (maskScore < bestScore) {
+			bestScore = maskScore;
+			bestMask = mask;
+		}
+	}
+
+	return bestMask;
+}
+
 function placeDataInQrCode(qrcode, qrcodeDimensions, data) {
 	let dataIdx = 0;
 	let encounteredTimingPattern = false;
@@ -428,14 +508,14 @@ function generate() {
 	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Bottom left
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Top right
 
-	//TODO: Encode Data ( + error correction) & determin Mask
 	const data = encodeData(info);
 
-	const maskIndex = 0;
+	//TODO: Error Correction
 
-	setFormatInformation(info.version, qrcode, qrcodeDimensions, info.errorCorrection, maskIndex); //TODO: replace "1" with actual Mask
+	const maskIndex = determinMask(qrcode, qrcodeDimensions, info.version, info.errorCorrection, data);
 
-	//TODO: Set Data to QR Code
+	setFormatInformation(info.version, qrcode, qrcodeDimensions, info.errorCorrection, maskIndex);
+
 	placeDataInQrCode(qrcode, qrcodeDimensions, data);
 
 	maskQrCode(qrcode, qrcodeDimensions, maskIndex);
