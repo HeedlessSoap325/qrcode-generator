@@ -1,10 +1,5 @@
 import capacities from "./capacities.json" with { type: "json" };
 
-const canvas = document.getElementById("qrcode");
-const inputData = document.getElementById("input");
-const errorLevel = document.getElementById("errorlvl");
-const canvasctx = canvas.getContext("2d");
-
 const PIXELSIZE = 8;
 
 const MODULE_BLACK_FLAG 	= 0b1;
@@ -14,8 +9,8 @@ const MODULE_ALIGNMENT_FLAG = 0b1000;
 const MODULE_FORMAT_FLAG	= 0b10000;
 const MODULE_DATA_FLAG 		= 0b100000;
 
-const FORMAT_INFORMATION_MASK = 0b101010000010010;
-const FORMAT_INFORMATION_GENERATOR = 0b10100110111;
+const FORMAT_INFORMATION_MASK 		= 0b101010000010010;
+const FORMAT_INFORMATION_GENERATOR 	= 0b10100110111;
 const VERSION_INFORMATION_GENERATOR = 0b1111100100101;
 
 
@@ -37,24 +32,13 @@ const ALIGNMENT_PATTERN = [
 	1, 1, 1, 1, 1,
 ];
 
-const DATA_EXTENSION_1 = [1, 1, 1, 0, 1, 1, 0, 0];
-const DATA_EXTENSION_2 = [0, 0, 0, 1, 0, 0, 0, 1];
+const DATA_EXTENSION_1 			= [1, 1, 1, 0, 1, 1, 0, 0];
+const DATA_EXTENSION_2 			= [0, 0, 0, 1, 0, 0, 0, 1];
 const ALPHANUMERIC_LOOKUP_TABLE = [
 	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
 	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 
 	" ", "$", "%", "*", "+", "-", ".", "/", ":"
 ];
-
-function drawQrCode(qrcode, qrcodeDimensions) {
-	for (let it = 0; it < (qrcodeDimensions * qrcodeDimensions); it++) {
-		const color = (qrcode[it] & PIXEL_BLACK_FLAG) ? "black" : "white";
-
-		canvasctx.fillStyle = color;
-		const x = it % qrcodeDimensions;
-		const y = Math.floor(it / qrcodeDimensions);
-		canvasctx.fillRect(x * PIXELSIZE, y * PIXELSIZE, PIXELSIZE, PIXELSIZE);
-	}
-}
 
 /*
 	Set the values in the Rectangle, starting at x and y, to the given data.
@@ -118,9 +102,7 @@ function determinEncoding(text) {
 	}
 }
 
-function determinQRCodeInfo() {
-	const input = inputData.value;
-	const errorCorrection = errorLevel.value;
+function determinQRCodeInfo(input, errorCorrection) {
 	const encoding = determinEncoding(input);
 
 	for(let i = 1; i <= 40; i++) {
@@ -146,7 +128,7 @@ function determinQRCodeInfo() {
 }
 
 /*
-	encode the data in inputData.value, based on the encoding mode.
+	encode the data in input, based on the encoding mode.
 	returns a list, which contains each codeword(8 bit, most significant bit first) as a list.
 	return = [
 		[0,0,0,1,0,0,0,0], //mode indicator + 4 most significat bits of character count indicator
@@ -157,7 +139,7 @@ function determinQRCodeInfo() {
 		...
 	]
 */
-function encodeData(info) {
+function encodeData(info, input) {
 	// Version    Numeric   Alphanumeric   byte
 	// 1  to 9    10        9              8
 	// 10 to 26   12        11             16
@@ -168,8 +150,8 @@ function encodeData(info) {
 		let countLen = 10; // See table above
 		if(info.version >= 10) countLen = 12;
 		if(info.version >= 27) countLen = 14;
-		const len 	= intToBitsFixed(inputData.value.length, countLen); // character count indicator must be countLen bits long
-		const parts = inputData.value.match(/.{1,3}/g) || []; // split input stream every 3 characters
+		const len 	= intToBitsFixed(input.length, countLen); // character count indicator must be countLen bits long
+		const parts = input.match(/.{1,3}/g) || []; // split input stream every 3 characters
 
 		ret = [...ret, ...mode, ...len];
 
@@ -187,8 +169,8 @@ function encodeData(info) {
 		let countLen = 9; // See table above
 		if(info.version >= 10) countLen = 11;
 		if(info.version >= 27) countLen = 13;
-		const len 	= intToBitsFixed(inputData.value.length, countLen); // character count indicator must be countLen bits long
-		const parts = inputData.value.match(/.{1,2}/g) || []; // split input stream every 3 characters
+		const len 	= intToBitsFixed(input.length, countLen); // character count indicator must be countLen bits long
+		const parts = input.match(/.{1,2}/g) || []; // split input stream every 3 characters
 
 		ret = [...ret, ...mode, ...len];
 
@@ -211,12 +193,12 @@ function encodeData(info) {
 		const mode 	= intToBitsFixed(4, 4); // 0100 is the mode indicator for numbers
 		let countLen = 8; // See table above
 		if(info.version >= 10) countLen = 16;
-		const len 	= intToBitsFixed(inputData.value.length, countLen); // character count indicator must be countLen bits long
+		const len 	= intToBitsFixed(input.length, countLen); // character count indicator must be countLen bits long
 
 		ret = [...ret, ...mode, ...len];
 
-		for(let it = 0; it < inputData.value.length; it++) {
-			const num = inputData.value.charCodeAt(it); // Convert to ascii code
+		for(let it = 0; it < input.length; it++) {
+			const num = input.charCodeAt(it); // Convert to ascii code
 			const bin = intToBitsFixed(num, 8);
 
 			ret = [...ret, ...bin];
@@ -485,8 +467,8 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 	}
 }
 
-function generate() {
-	const info = determinQRCodeInfo();
+function generate(input, errorCorrection) {
+	const info = determinQRCodeInfo(input, errorCorrection);
 	const qrcodeDimensions = 21 + ((info.version - 1) * 4);
 	const qrcode = Array.from({length: qrcodeDimensions**2}).fill(0);
 
@@ -495,15 +477,15 @@ function generate() {
 	const timingPatternLen = qrcodeDimensions - 16;
 	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, FINDERPATTERN, PIXEL_RESERVED_FLAG); // Top left
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, FINDER_PATTERN, PIXEL_RESERVED_FLAG); // Top left
 	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
 	setQrCodeArea(qrcode, qrcodeDimensions, 0, 7, 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
 
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, FINDERPATTERN, PIXEL_RESERVED_FLAG); // Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, FINDER_PATTERN, PIXEL_RESERVED_FLAG); // Top right
 	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 0, 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
 	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 7, 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, FINDERPATTERN, PIXEL_RESERVED_FLAG); // Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, FINDER_PATTERN, PIXEL_RESERVED_FLAG); // Bottom left
 	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
 	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
 
@@ -512,7 +494,7 @@ function generate() {
 	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Bottom left
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Top right
 
-	const data = encodeData(info);
+	const data = encodeData(info, input);
 
 	//TODO: Error Correction
 
@@ -526,11 +508,29 @@ function generate() {
 
 	console.groupEnd();
 
-	canvasctx.canvas.width  = qrcodeDimensions * PIXELSIZE;
-	canvasctx.canvas.height = qrcodeDimensions * PIXELSIZE;
-	drawQrCode(qrcode, qrcodeDimensions);
+	return [ qrcode, qrcodeDimensions ];
 }
 
-generate();
-inputData.addEventListener("input", generate);
-errorLevel.addEventListener("input", generate);
+function drawQrCode(qrcode, qrcodeDimensions) {
+	const canvas = document.getElementById("qrcode");
+	const canvasctx = canvas.getContext("2d");
+
+	canvasctx.canvas.width  = qrcodeDimensions * PIXELSIZE;
+	canvasctx.canvas.height = qrcodeDimensions * PIXELSIZE;
+
+	for (let it = 0; it < (qrcodeDimensions ** 2); it++) {
+		const color = (qrcode[it] & PIXEL_BLACK_FLAG) ? "black" : "white";
+
+		canvasctx.fillStyle = color;
+		const x = it % qrcodeDimensions;
+		const y = Math.floor(it / qrcodeDimensions);
+		canvasctx.fillRect(x * PIXELSIZE, y * PIXELSIZE, PIXELSIZE, PIXELSIZE);
+	}
+}
+
+const inputData = document.getElementById("input");
+const errorLevel = document.getElementById("errorlvl");
+
+drawQrCode(...generate(inputData.value, errorLevel.value));
+inputData.addEventListener("input", () => drawQrCode(...generate(inputData.value, errorLevel.value)));
+errorLevel.addEventListener("input", () => drawQrCode(...generate(inputData.value, errorLevel.value)));
