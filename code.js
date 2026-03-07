@@ -137,7 +137,7 @@ function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
 	for (let it = 0; it < ((intervals + 1) * (intervals + 1)); it++) {
 		const x = allPairs[it][0]; // Center x
 		const y = allPairs[it][1]; // Center y
-		if ((x <= 7 && (y <= 7 || y >= (qrcodeDimensions - 8))) || (x >= (qrcodeDimensions - 8) && y <= 7)) continue; // Don't place inside finder Patterns
+		if (((x - 2) < 8 && ((y - 2) < 8 || (y + 2) > (qrcodeDimensions - 8 - 1))) || ((x + 2) > (qrcodeDimensions - 8 - 1) && (y - 2) < 8)) continue; // Don't place inside finder Patterns
 		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, ALIGNMENT_PATTERN, MODULE_ALIGNMENT_FLAG);
 	}
 }
