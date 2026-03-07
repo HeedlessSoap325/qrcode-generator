@@ -44,6 +44,46 @@ const ALPHANUMERIC_LOOKUP_TABLE = [
 	" ", "$", "%", "*", "+", "-", ".", "/", ":"
 ];
 
+function intToBits(n) {
+    return n.toString(2).split('').map(Number);
+}
+
+function intToBitsFixed(n, length) {
+    if (n < 0) {
+        throw new Error("Only non-negative integers supported");
+    }
+
+    const max = 1 << length;
+    if (n >= max) {
+        throw new Error(`Number ${n} does not fit in ${length} bits`);
+    }
+
+    const bits = new Array(length);
+
+    for (let i = length - 1; i >= 0; i--) {
+        bits[i] = n & 1;
+        n >>= 1;
+    }
+
+    return bits;
+}
+
+function bitsToInt(bits) {
+    return parseInt(bits.join(''), 2);
+}
+
+function mod2Division(dividend, divisor) {
+    let remainder = dividend.slice();
+    for (let i = 0; i <= remainder.length - divisor.length; i++) {
+        if (remainder[i] === 1) {
+            for (let j = 0; j < divisor.length; j++) {
+                remainder[i + j] ^= divisor[j];
+            }
+        }
+    }
+    return remainder.slice(-(divisor.length - 1));
+}
+
 /*
 	Set the values in the Rectangle, starting at x and y, to the given data.
 	data = [1, 0, 0, 1, 0, 1, 0, 1, 1], with w=3 & h=3 and x=1, y=2 will set:
@@ -233,6 +273,110 @@ function encodeData(info, input) {
 	return ret;
 }
 
+function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorrection, maskIndex) {
+	let data = 0b0;
+
+	if (maskIndex < 0 || maskIndex > 7) {
+		console.error("setFormatInformation: supplied invalide maskIndex, must be from 0 to 7");
+		return;
+	}
+
+	if(errorCorrection === "M") data = 0b00 << 3
+	else if(errorCorrection === "L") data = 0b01 << 3
+	else if(errorCorrection === "H") data = 0b10 << 3
+	else if(errorCorrection === "Q") data = 0b11 << 3
+	else {
+		console.error("setFormatInformation: supplied invalide errorCorrection, is not M | L | H | Q");
+		return;
+	}
+    data |= maskIndex; // add mask bits (3 bits)
+
+    data <<= 10; // shift left 10 bits
+
+    // Convert to bit array (15 bits total)
+    let dividend = intToBitsFixed(data, 15);
+    let generator = intToBitsFixed(FORMAT_INFORMATION_GENERATOR, 11);
+
+    let remainder = mod2Division(dividend, generator); // Compute remainder
+    let remainderInt = bitsToInt(remainder); // Convert remainder to integer
+
+    data |= remainderInt; // Merge remainder
+
+    data ^= FORMAT_INFORMATION_MASK; // Apply QR format mask (0x5412)
+
+    const info = intToBitsFixed(data, 15); // Final 15-bit format string
+	const info1 = info.slice(0, 8);
+	info1.splice(6, 0, 1);
+	const info2 = info.slice(7, 15).reverse()
+	info2.splice(6, 0, 1);
+
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 9, 1, info1, MODULE_FORMAT_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2, MODULE_FORMAT_FLAG); // Top to bottom
+
+	const info3 = info.slice(0, 7).reverse();
+	info3.splice(0, 0, 1);
+	const info4 = info.slice(7, 15);
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, (qrcodeDimensions - 8), 1, 8, info3, MODULE_FORMAT_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 8, 8, 1, info4, MODULE_FORMAT_FLAG); // Left to right
+
+
+	if(qrcodeVersion > 6) { // Version Information is required for all QR codes over version 6
+		let data = qrcodeVersion << 12;
+
+		// Convert to bit array (18 bits total)
+		let dividend = intToBitsFixed(data, 18);
+    	let generator = intToBitsFixed(VERSION_INFORMATION_GENERATOR, 13);
+
+		let remainder = mod2Division(dividend, generator); // Compute remainder
+		let remainderInt = bitsToInt(remainder); // Convert remainder to integer
+
+		data |= remainderInt; // Merge remainder
+		
+		data = intToBitsFixed(data, 18); // Final 18-bit version string
+		data = data.reverse(); // Least significant Bit first
+
+		// Tanspose
+		const data1 = new Array(data.length);
+		for (let i = 0; i < data.length; i++) {
+			data1[(i % 3) * 6 + Math.floor(i / 3)] = data[i];
+		}
+
+		setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 11), 0, 3, 6, data, MODULE_FORMAT_FLAG); //Top right
+		setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 11), 6, 3, data1, MODULE_FORMAT_FLAG); //Bottom left
+	}
+}
+
+function placeDataInQrCode(qrcode, qrcodeDimensions, data) {
+	let dataIdx = 0;
+	let encounteredTimingPattern = false;
+
+	for(let currentCol = 0; currentCol < qrcodeDimensions; currentCol += 2) {
+		for(let rowIter = 0; rowIter < qrcodeDimensions; rowIter++) {
+			if (currentCol === (qrcodeDimensions - 7)) {
+				encounteredTimingPattern = true;
+				currentCol++;
+			}
+
+			const dir = ((currentCol - (encounteredTimingPattern ? 1 : 0)) / 2) % 2; // 0 = upwards, 1 = downwards
+			const currentRow = (dir === 0 ? rowIter : (qrcodeDimensions - rowIter - 1));
+			const qrX = (qrcodeDimensions - currentCol - 1);
+			const qrY = (qrcodeDimensions - currentRow - 1);
+
+			if (!(qrcode[(qrY * qrcodeDimensions) + qrX] & RESERVED_MODULE)) {
+				setQrCodeArea(qrcode, qrcodeDimensions, qrX, qrY, 1, 1, [data[dataIdx]], MODULE_DATA_FLAG);
+				dataIdx++;
+			}
+			if (!(qrcode[(qrY * qrcodeDimensions) + qrX - 1] & RESERVED_MODULE)) {
+				setQrCodeArea(qrcode, qrcodeDimensions, qrX - 1, qrY, 1, 1, [data[dataIdx]], MODULE_DATA_FLAG);
+				dataIdx++;
+			}
+			
+			if (dataIdx >= data.length) break;
+		}
+		if (dataIdx >= data.length) break;
+	}
+}
+
 function maskQrCode(qrcode, qrcodeDimensions, maskIndex) {
 	if (maskIndex < 0 || maskIndex > 7) {
 		console.error(`maskQrCode: invalid maskindex (${maskIndex}) provided. Must be from 0 to 7`);
@@ -324,13 +468,16 @@ function determinMask(qrcode, qrcodeDimensions, qrcodeVersion, errorCorrection, 
 	let bestMask = 0;
 	let bestScore = Infinity;
 
-	for (let mask = 0; mask < 8; mask++) {
-		const dummy = qrcode.slice();
-		setFormatInformation(qrcodeVersion, dummy, qrcodeDimensions, errorCorrection, mask); // Reserve space for version information
-		placeDataInQrCode(dummy, qrcodeDimensions, data);
+	const dummy = qrcode.slice();
+	setFormatInformation(qrcodeVersion, dummy, qrcodeDimensions, errorCorrection, 0); // Reserve space for version information, will be overriten on each pass
+	placeDataInQrCode(dummy, qrcodeDimensions, data);
 
-		maskQrCode(dummy, qrcodeDimensions, mask);
-		const maskScore = evaluateMaskScore(dummy, qrcodeDimensions);
+	for (let mask = 0; mask < 8; mask++) {
+		const dummy2 = dummy.slice();
+		setFormatInformation(qrcodeVersion, dummy2, qrcodeDimensions, errorCorrection, mask); // Reserve space for version information, will be overriten on each pass
+
+		maskQrCode(dummy2, qrcodeDimensions, mask);
+		const maskScore = evaluateMaskScore(dummy2, qrcodeDimensions);
 		
 		if (maskScore < bestScore) {
 			bestScore = maskScore;
@@ -339,150 +486,6 @@ function determinMask(qrcode, qrcodeDimensions, qrcodeVersion, errorCorrection, 
 	}
 
 	return bestMask;
-}
-
-function placeDataInQrCode(qrcode, qrcodeDimensions, data) {
-	let dataIdx = 0;
-	let encounteredTimingPattern = false;
-
-	for(let currentCol = 0; currentCol < qrcodeDimensions; currentCol += 2) {
-		for(let rowIter = 0; rowIter < qrcodeDimensions; rowIter++) {
-			if (currentCol === (qrcodeDimensions - 7)) {
-				encounteredTimingPattern = true;
-				currentCol++;
-			}
-
-			const dir = ((currentCol - (encounteredTimingPattern ? 1 : 0)) / 2) % 2; // 0 = upwards, 1 = downwards
-			const currentRow = (dir === 0 ? rowIter : (qrcodeDimensions - rowIter - 1));
-			const qrX = (qrcodeDimensions - currentCol - 1);
-			const qrY = (qrcodeDimensions - currentRow - 1);
-
-			if (!(qrcode[(qrY * qrcodeDimensions) + qrX] & RESERVED_MODULE)) {
-				setQrCodeArea(qrcode, qrcodeDimensions, qrX, qrY, 1, 1, [data[dataIdx]], MODULE_DATA_FLAG);
-				dataIdx++;
-			}
-			if (!(qrcode[(qrY * qrcodeDimensions) + qrX - 1] & RESERVED_MODULE)) {
-				setQrCodeArea(qrcode, qrcodeDimensions, qrX - 1, qrY, 1, 1, [data[dataIdx]], MODULE_DATA_FLAG);
-				dataIdx++;
-			}
-			
-			if (dataIdx >= data.length) break;
-		}
-		if (dataIdx >= data.length) break;
-	}
-}
-
-function intToBits(n) {
-    return n.toString(2).split('').map(Number);
-}
-
-function intToBitsFixed(n, length) {
-    if (n < 0) {
-        throw new Error("Only non-negative integers supported");
-    }
-
-    const max = 1 << length;
-    if (n >= max) {
-        throw new Error(`Number ${n} does not fit in ${length} bits`);
-    }
-
-    const bits = new Array(length);
-
-    for (let i = length - 1; i >= 0; i--) {
-        bits[i] = n & 1;
-        n >>= 1;
-    }
-
-    return bits;
-}
-
-function bitsToInt(bits) {
-    return parseInt(bits.join(''), 2);
-}
-
-function mod2Division(dividend, divisor) {
-    let remainder = dividend.slice();
-    for (let i = 0; i <= remainder.length - divisor.length; i++) {
-        if (remainder[i] === 1) {
-            for (let j = 0; j < divisor.length; j++) {
-                remainder[i + j] ^= divisor[j];
-            }
-        }
-    }
-    return remainder.slice(-(divisor.length - 1));
-}
-
-function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorrection, maskIndex) {
-	let data = 0b0;
-
-	if (maskIndex < 0 || maskIndex > 7) {
-		console.error("setFormatInformation: supplied invalide maskIndex, must be from 0 to 7");
-		return;
-	}
-
-	if(errorCorrection === "M") data = 0b00 << 3
-	else if(errorCorrection === "L") data = 0b01 << 3
-	else if(errorCorrection === "H") data = 0b10 << 3
-	else if(errorCorrection === "Q") data = 0b11 << 3
-	else {
-		console.error("setFormatInformation: supplied invalide errorCorrection, is not M | L | H | Q");
-		return;
-	}
-    data |= maskIndex; // add mask bits (3 bits)
-
-    data <<= 10; // shift left 10 bits
-
-    // Convert to bit array (15 bits total)
-    let dividend = intToBitsFixed(data, 15);
-    let generator = intToBitsFixed(FORMAT_INFORMATION_GENERATOR, 11);
-
-    let remainder = mod2Division(dividend, generator); // Compute remainder
-    let remainderInt = bitsToInt(remainder); // Convert remainder to integer
-
-    data |= remainderInt; // Merge remainder
-
-    data ^= FORMAT_INFORMATION_MASK; // Apply QR format mask (0x5412)
-
-    const info = intToBitsFixed(data, 15); // Final 15-bit format string
-	const info1 = info.slice(0, 8);
-	info1.splice(6, 0, 1);
-	const info2 = info.slice(7, 15).reverse()
-	info2.splice(6, 0, 1);
-
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 9, 1, info1, MODULE_FORMAT_FLAG); // Left to right
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2, MODULE_FORMAT_FLAG); // Top to bottom
-
-	const info3 = info.slice(0, 7).reverse();
-	info3.splice(0, 0, 1);
-	const info4 = info.slice(7, 15);
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, (qrcodeDimensions - 8), 1, 8, info3, MODULE_FORMAT_FLAG); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 8, 8, 1, info4, MODULE_FORMAT_FLAG); // Left to right
-
-
-	if(qrcodeVersion > 6) { // Version Information is required for all QR codes over version 6
-		let data = qrcodeVersion << 12;
-
-		// Convert to bit array (18 bits total)
-		let dividend = intToBitsFixed(data, 18);
-    	let generator = intToBitsFixed(VERSION_INFORMATION_GENERATOR, 13);
-
-		let remainder = mod2Division(dividend, generator); // Compute remainder
-		let remainderInt = bitsToInt(remainder); // Convert remainder to integer
-
-		data |= remainderInt; // Merge remainder
-		
-		data = intToBitsFixed(data, 18); // Final 18-bit version string
-		data = data.reverse(); // Least significant Bit first
-
-		// Tanspose
-		const data1 = new Array(data.length);
-		for (let i = 0; i < data.length; i++) {
-			data1[(i % 3) * 6 + Math.floor(i / 3)] = data[i];
-		}
-
-		setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 11), 0, 3, 6, data, MODULE_FORMAT_FLAG); //Top right
-		setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 11), 6, 3, data1, MODULE_FORMAT_FLAG); //Bottom left
-	}
 }
 
 function generate(input, errorCorrection) {
