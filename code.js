@@ -14,8 +14,8 @@ const ENCODEING_REGION = MODULE_DATA_FLAG | MODULE_FORMAT_FLAG;
 const RESERVED_MODULE  = FUNCTION_PATTERN | MODULE_FORMAT_FLAG;	 
 
 const FORMAT_INFORMATION_MASK 		= 0b101010000010010;
-const FORMAT_INFORMATION_GENERATOR 	= 0b10100110111;
-const VERSION_INFORMATION_GENERATOR = 0b1111100100101;
+const FORMAT_INFORMATION_GENERATOR 	= [1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1];
+const VERSION_INFORMATION_GENERATOR = [1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1];
 
 
 const FINDER_PATTERN = [
@@ -158,7 +158,7 @@ function determinQRCodeInfo(input, errorCorrection) {
 	for(let i = 1; i <= 40; i++) {
 		const limit = capacities[`${i}`][errorCorrection][encoding];
 		const maxCodewords = capacities[`${i}`][errorCorrection]["maxCodewords"];
-		if(limit >= input.length) {
+		if(limit >= input.length || i === 40) {
 			return {
 				version: i,
 				encoding,
@@ -168,13 +168,6 @@ function determinQRCodeInfo(input, errorCorrection) {
 			};
 		}
 	}
-	return {
-		version: 40,
-		encoding,
-		limit: capacities["40"][errorCorrection][encoding],
-		errorCorrection,
-		maxCodewords: capacities["40"][errorCorrection]["maxCodewords"],
-	};
 }
 
 /*
@@ -194,14 +187,20 @@ function encodeData(info, input) {
 	// 1  to 9    10        9              8
 	// 10 to 26   12        11             16
 	// 27 to 40   14        13             16
+	let data = input;
+	if (info.limit > input.length) {
+		data = input.slice(0, info.limit);
+	}
+
 	let ret = [];
+
 	if(info.encoding === "numeric") {
 		const mode 	= intToBitsFixed(1, 4); // 0001 is the mode indicator for numbers
 		let countLen = 10; // See table above
 		if(info.version >= 10) countLen = 12;
 		if(info.version >= 27) countLen = 14;
-		const len 	= intToBitsFixed(input.length, countLen); // character count indicator must be countLen bits long
-		const parts = input.match(/.{1,3}/g) || []; // split input stream every 3 characters
+		const len 	= intToBitsFixed(data.length, countLen); // character count indicator must be countLen bits long
+		const parts = data.match(/.{1,3}/g) || []; // split data stream every 3 characters
 
 		ret = [...ret, ...mode, ...len];
 
@@ -219,8 +218,8 @@ function encodeData(info, input) {
 		let countLen = 9; // See table above
 		if(info.version >= 10) countLen = 11;
 		if(info.version >= 27) countLen = 13;
-		const len 	= intToBitsFixed(input.length, countLen); // character count indicator must be countLen bits long
-		const parts = input.match(/.{1,2}/g) || []; // split input stream every 3 characters
+		const len 	= intToBitsFixed(data.length, countLen); // character count indicator must be countLen bits long
+		const parts = data.match(/.{1,2}/g) || []; // split data stream every 3 characters
 
 		ret = [...ret, ...mode, ...len];
 
@@ -243,12 +242,12 @@ function encodeData(info, input) {
 		const mode 	= intToBitsFixed(4, 4); // 0100 is the mode indicator for numbers
 		let countLen = 8; // See table above
 		if(info.version >= 10) countLen = 16;
-		const len 	= intToBitsFixed(input.length, countLen); // character count indicator must be countLen bits long
+		const len 	= intToBitsFixed(data.length, countLen); // character count indicator must be countLen bits long
 
 		ret = [...ret, ...mode, ...len];
 
-		for(let it = 0; it < input.length; it++) {
-			const num = input.charCodeAt(it); // Convert to ascii code
+		for(let it = 0; it < data.length; it++) {
+			const num = data.charCodeAt(it); // Convert to ascii code
 			const bin = intToBitsFixed(num, 8);
 
 			ret = [...ret, ...bin];
@@ -273,6 +272,22 @@ function encodeData(info, input) {
 	return ret;
 }
 
+function generateBCH(data, dataLen, totalLen, generator, mask) {
+	let ret = 0;
+	ret = data << (totalLen - dataLen); // shift left (totalLen - dataLen) bits
+
+    // Convert to bit array (totalLen bits total)
+    let dividend = intToBitsFixed(ret, totalLen);
+
+    let remainder = mod2Division(dividend, generator); // Compute remainder
+    let remainderInt = bitsToInt(remainder); // Convert remainder to integer
+
+    ret |= remainderInt; // Merge remainder
+    ret ^= mask; // Apply mask
+
+	return ret;
+}
+
 function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorrection, maskIndex) {
 	let data = 0b0;
 
@@ -289,20 +304,7 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 		console.error("setFormatInformation: supplied invalide errorCorrection, is not M | L | H | Q");
 		return;
 	}
-    data |= maskIndex; // add mask bits (3 bits)
-
-    data <<= 10; // shift left 10 bits
-
-    // Convert to bit array (15 bits total)
-    let dividend = intToBitsFixed(data, 15);
-    let generator = intToBitsFixed(FORMAT_INFORMATION_GENERATOR, 11);
-
-    let remainder = mod2Division(dividend, generator); // Compute remainder
-    let remainderInt = bitsToInt(remainder); // Convert remainder to integer
-
-    data |= remainderInt; // Merge remainder
-
-    data ^= FORMAT_INFORMATION_MASK; // Apply QR format mask (0x5412)
+	data = generateBCH(data |= maskIndex, 5, 15, FORMAT_INFORMATION_GENERATOR, FORMAT_INFORMATION_MASK);
 
     const info = intToBitsFixed(data, 15); // Final 15-bit format string
 	const info1 = info.slice(0, 8);
@@ -321,17 +323,7 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 
 
 	if(qrcodeVersion > 6) { // Version Information is required for all QR codes over version 6
-		let data = qrcodeVersion << 12;
-
-		// Convert to bit array (18 bits total)
-		let dividend = intToBitsFixed(data, 18);
-    	let generator = intToBitsFixed(VERSION_INFORMATION_GENERATOR, 13);
-
-		let remainder = mod2Division(dividend, generator); // Compute remainder
-		let remainderInt = bitsToInt(remainder); // Convert remainder to integer
-
-		data |= remainderInt; // Merge remainder
-		
+		let data = generateBCH(qrcodeVersion, 6, 18, VERSION_INFORMATION_GENERATOR, 0);
 		data = intToBitsFixed(data, 18); // Final 18-bit version string
 		data = data.reverse(); // Least significant Bit first
 
@@ -494,9 +486,8 @@ function generate(input, errorCorrection) {
 	const qrcode = Array.from({length: qrcodeDimensions**2}).fill(0);
 
 	console.groupCollapsed("generate: Expected warnings");
+
 	const finderSeperator = Array.from({length: 8}).fill(0);
-	const timingPatternLen = qrcodeDimensions - 16;
-	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 
 	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, FINDER_PATTERN,  MODULE_FINDER_FLAG); // Top left
 	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator, MODULE_FINDER_FLAG); // Top to bottom
@@ -511,6 +502,9 @@ function generate(input, errorCorrection) {
 	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator, MODULE_FINDER_FLAG); // Top to bottom
 
 	setAlignmentPatterns(qrcode, info.version, qrcodeDimensions);
+
+	const timingPatternLen = qrcodeDimensions - 16;
+	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 
 	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, MODULE_TIMING_FLAG); // Top left to Bottom left
 	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, MODULE_TIMING_FLAG); // Top left to Top right
