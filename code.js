@@ -9,6 +9,10 @@ const MODULE_ALIGNMENT_FLAG = 0b1000;
 const MODULE_FORMAT_FLAG	= 0b10000;
 const MODULE_DATA_FLAG 		= 0b100000;
 
+const FUNCTION_PATTERN = MODULE_FINDER_FLAG | MODULE_TIMING_FLAG | MODULE_ALIGNMENT_FLAG;
+const ENCODEING_REGION = MODULE_DATA_FLAG | MODULE_FORMAT_FLAG;
+const RESERVED_MODULE  = FUNCTION_PATTERN | MODULE_FORMAT_FLAG;	 
+
 const FORMAT_INFORMATION_MASK 		= 0b101010000010010;
 const FORMAT_INFORMATION_GENERATOR 	= 0b10100110111;
 const VERSION_INFORMATION_GENERATOR = 0b1111100100101;
@@ -54,12 +58,18 @@ const ALPHANUMERIC_LOOKUP_TABLE = [
 		y: 4, x: 3 to 1
 */
 function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data, flags = 0) {
-	for (let it = 0; it < w * h; it++) {
+	if (data.length < (w * h)) {
+		console.error(`setQrCodeArea: length of data (${data.length}) is less than expected (${w * h})`);
+		return;
+	}
+
+	for (let it = 0; it < (w * h); it++) {
 		const rowOffset = Math.floor(it / w);
 		const colOffset = it % w;
 		const index = (y + rowOffset) * qrcodeDimensions + (x + colOffset);
-		if (qrcode[index] & PIXEL_RESERVED_FLAG) {
-			console.warn(`setQrCodeArea: Function tried setting reserved pixel (x=${x + colOffset}, y=${y + rowOffset}) to ${data[it]}`);
+
+		if (qrcode[index] & FUNCTION_PATTERN) {
+			console.warn(`setQrCodeArea: Function tried setting a module (x=${x + colOffset}, y=${y + rowOffset}) reserved by a function pattern to ${data[it]}`);
 		} else {
 			const color = data[it] === 0 ? 0 : 1;
 			qrcode[index] = color | flags;
@@ -88,7 +98,7 @@ function setAlignmentPatterns(qrcode, qrcodeVersion, qrcodeDimensions) {
 		const x = allPairs[it][0]; // Center x
 		const y = allPairs[it][1]; // Center y
 		if ((x <= 7 && (y <= 7 || y >= (qrcodeDimensions - 8))) || (x >= (qrcodeDimensions - 8) && y <= 7)) continue; // Don't place inside finder Patterns
-		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, ALIGNMENT_PATTERN, PIXEL_RESERVED_FLAG);
+		setQrCodeArea(qrcode, qrcodeDimensions, x - 2, y - 2, 5, 5, ALIGNMENT_PATTERN, MODULE_ALIGNMENT_FLAG);
 	}
 }
 
@@ -225,13 +235,14 @@ function encodeData(info, input) {
 
 function maskQrCode(qrcode, qrcodeDimensions, maskIndex) {
 	if (maskIndex < 0 || maskIndex > 7) {
-		console.error(`maskQrCode: invalide maskindex '${maskIndex}' provided. Must be from 0 to 7!`);
+		console.error(`maskQrCode: invalid maskindex (${maskIndex}) provided. Must be from 0 to 7`);
 		return;
 	}
+
 	for (let i = 0; i < qrcodeDimensions; i++) {
 		for (let j = 0; j < qrcodeDimensions; j++) {
 			const qrIndex = (j * qrcodeDimensions) + i;
-			if (qrcode[qrIndex] & PIXEL_RESERVED_FLAG) continue;
+			if (qrcode[qrIndex] & RESERVED_MODULE) continue;
 
 			let res = 0;
 			switch (maskIndex) {
@@ -251,7 +262,7 @@ function maskQrCode(qrcode, qrcodeDimensions, maskIndex) {
 }
 
 function evaluateMaskScore(qrcode, qrcodeDimensions) {
-	function get(y,x) { return qrcode[y * qrcodeDimensions + x] & PIXEL_BLACK_FLAG; }
+	function get(y,x) { return qrcode[y * qrcodeDimensions + x] & MODULE_BLACK_FLAG; }
 	let score = 0;
 
 	// Rule 1
@@ -340,17 +351,18 @@ function placeDataInQrCode(qrcode, qrcodeDimensions, data) {
 				encounteredTimingPattern = true;
 				currentCol++;
 			}
+
 			const dir = ((currentCol - (encounteredTimingPattern ? 1 : 0)) / 2) % 2; // 0 = upwards, 1 = downwards
 			const currentRow = (dir === 0 ? rowIter : (qrcodeDimensions - rowIter - 1));
 			const qrX = (qrcodeDimensions - currentCol - 1);
 			const qrY = (qrcodeDimensions - currentRow - 1);
 
-			if (!(qrcode[(qrY * qrcodeDimensions) + qrX] & PIXEL_RESERVED_FLAG)) {
-				setQrCodeArea(qrcode, qrcodeDimensions, qrX, qrY, 1, 1, [data[dataIdx]], PIXEL_DATA_FLAG);
+			if (!(qrcode[(qrY * qrcodeDimensions) + qrX] & RESERVED_MODULE)) {
+				setQrCodeArea(qrcode, qrcodeDimensions, qrX, qrY, 1, 1, [data[dataIdx]], MODULE_DATA_FLAG);
 				dataIdx++;
 			}
-			if (!(qrcode[(qrY * qrcodeDimensions) + qrX - 1] & PIXEL_RESERVED_FLAG)) {
-				setQrCodeArea(qrcode, qrcodeDimensions, qrX - 1, qrY, 1, 1, [data[dataIdx]], PIXEL_DATA_FLAG);
+			if (!(qrcode[(qrY * qrcodeDimensions) + qrX - 1] & RESERVED_MODULE)) {
+				setQrCodeArea(qrcode, qrcodeDimensions, qrX - 1, qrY, 1, 1, [data[dataIdx]], MODULE_DATA_FLAG);
 				dataIdx++;
 			}
 			
@@ -402,6 +414,12 @@ function mod2Division(dividend, divisor) {
 
 function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorrection, maskIndex) {
 	let data = 0b0;
+
+	if (maskIndex < 0 || maskIndex > 7) {
+		console.error("setFormatInformation: supplied invalide maskIndex, must be from 0 to 7");
+		return;
+	}
+
 	if(errorCorrection === "M") data = 0b00 << 3
 	else if(errorCorrection === "L") data = 0b01 << 3
 	else if(errorCorrection === "H") data = 0b10 << 3
@@ -431,14 +449,14 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 	const info2 = info.slice(7, 15).reverse()
 	info2.splice(6, 0, 1);
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 9, 1, info1, PIXEL_RESERVED_FLAG); // Left to right
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2, PIXEL_RESERVED_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 8, 9, 1, info1, MODULE_FORMAT_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 0, 1, 8, info2, MODULE_FORMAT_FLAG); // Top to bottom
 
 	const info3 = info.slice(0, 7).reverse();
 	info3.splice(0, 0, 1);
 	const info4 = info.slice(7, 15);
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, (qrcodeDimensions - 8), 1, 8, info3, PIXEL_RESERVED_FLAG); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 8, 8, 1, info4, PIXEL_RESERVED_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, (qrcodeDimensions - 8), 1, 8, info3, MODULE_FORMAT_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 8, 8, 1, info4, MODULE_FORMAT_FLAG); // Left to right
 
 
 	if(qrcodeVersion > 6) { // Version Information is required for all QR codes over version 6
@@ -462,8 +480,8 @@ function setFormatInformation(qrcodeVersion, qrcode, qrcodeDimensions, errorCorr
 			data1[(i % 3) * 6 + Math.floor(i / 3)] = data[i];
 		}
 
-		setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 11), 0, 3, 6, data, PIXEL_RESERVED_FLAG); //Top right
-		setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 11), 6, 3, data1, PIXEL_RESERVED_FLAG); //Bottom left
+		setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 11), 0, 3, 6, data, MODULE_FORMAT_FLAG); //Top right
+		setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 11), 6, 3, data1, MODULE_FORMAT_FLAG); //Bottom left
 	}
 }
 
@@ -477,22 +495,22 @@ function generate(input, errorCorrection) {
 	const timingPatternLen = qrcodeDimensions - 16;
 	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, FINDER_PATTERN, PIXEL_RESERVED_FLAG); // Top left
-	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, 7, 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 0, 7, 7, FINDER_PATTERN,  MODULE_FINDER_FLAG); // Top left
+	setQrCodeArea(qrcode, qrcodeDimensions, 7, 0, 1, 8, finderSeperator, MODULE_FINDER_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, 7, 8, 1, finderSeperator, MODULE_FINDER_FLAG); // Left to right
 
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, FINDER_PATTERN, PIXEL_RESERVED_FLAG); // Top right
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 0, 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
-	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 7, 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 7), 0, 7, 7, FINDER_PATTERN,  MODULE_FINDER_FLAG); // Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 0, 1, 8, finderSeperator, MODULE_FINDER_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, (qrcodeDimensions - 8), 7, 8, 1, finderSeperator, MODULE_FINDER_FLAG); // Left to right
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, FINDER_PATTERN, PIXEL_RESERVED_FLAG); // Bottom left
-	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator, PIXEL_RESERVED_FLAG); // Left to right
-	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator, PIXEL_RESERVED_FLAG); // Top to bottom
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 7), 7, 7, FINDER_PATTERN,  MODULE_FINDER_FLAG); // Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 0, (qrcodeDimensions - 8), 8, 1, finderSeperator, MODULE_FINDER_FLAG); // Left to right
+	setQrCodeArea(qrcode, qrcodeDimensions, 7, (qrcodeDimensions - 8), 1, 8, finderSeperator, MODULE_FINDER_FLAG); // Top to bottom
 
 	setAlignmentPatterns(qrcode, info.version, qrcodeDimensions);
 
-	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Bottom left
-	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, PIXEL_RESERVED_FLAG); // Top left to Top right
+	setQrCodeArea(qrcode, qrcodeDimensions, 6, 8, 1, timingPatternLen, timingPattern, MODULE_TIMING_FLAG); // Top left to Bottom left
+	setQrCodeArea(qrcode, qrcodeDimensions, 8, 6, timingPatternLen, 1, timingPattern, MODULE_TIMING_FLAG); // Top left to Top right
 
 	const data = encodeData(info, input);
 
@@ -519,7 +537,7 @@ function drawQrCode(qrcode, qrcodeDimensions) {
 	canvasctx.canvas.height = qrcodeDimensions * PIXELSIZE;
 
 	for (let it = 0; it < (qrcodeDimensions ** 2); it++) {
-		const color = (qrcode[it] & PIXEL_BLACK_FLAG) ? "black" : "white";
+		const color = (qrcode[it] & MODULE_BLACK_FLAG) ? "black" : "white";
 
 		canvasctx.fillStyle = color;
 		const x = it % qrcodeDimensions;
