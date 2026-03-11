@@ -1,0 +1,1058 @@
+{
+	"1-L" : {
+		"ECperBlock": 7,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 19
+	},			
+	"1-M" : {
+		"ECperBlock": 10,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 16
+	},			
+	"1-Q" : {
+		"ECperBlock": 13,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 13
+	},			
+	"1-H" : {
+		"ECperBlock": 17,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 9
+	},			
+	"2-L" : {
+		"ECperBlock": 10,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 34
+	},			
+	"2-M" : {
+		"ECperBlock": 16,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 28
+	},			
+	"2-Q" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 22
+	},			
+	"2-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 16
+	},			
+	"3-L" : {
+		"ECperBlock": 15,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 55
+	},			
+	"3-M" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 44
+	},			
+	"3-Q" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 17
+	},			
+	"3-H" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 13
+	},			
+	"4-L" : {
+		"ECperBlock": 20,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 80
+	},			
+	"4-M" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 32
+	},			
+	"4-Q" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 24
+	},			
+	"4-H" : {
+		"ECperBlock": 16,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 9
+	},			
+	"5-L" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 108
+	},			
+	"5-M" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 43
+	},			
+	"5-Q" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"5-H" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 11,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 12
+	}, 	
+	"6-L" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 68
+	},			
+	"6-M" : {
+		"ECperBlock": 16,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 27
+	},			
+	"6-Q" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 19
+	},			
+	"6-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 15
+	},			
+	"7-L" : {
+		"ECperBlock": 20,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 78
+	},			
+	"7-M" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 31
+	},			
+	"7-Q" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 14,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 15
+	}, 	
+	"7-H" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 13,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 14
+	}, 	
+	"8-L" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 97
+	},			
+	"8-M" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 38,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 39
+	}, 	
+	"8-Q" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 18,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 19
+	}, 	
+	"8-H" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 14,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 15
+	}, 	
+	"9-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 116
+	},			
+	"9-M" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 36,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 37
+	}, 	
+	"9-Q" : {
+		"ECperBlock": 20,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 16,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 17
+	}, 	
+	"9-H" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 12,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 13
+	}, 	
+	"10-L" : {
+		"ECperBlock": 18,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 68,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 69
+	}, 	
+	"10-M" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 43,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 44
+	}, 	
+	"10-Q" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 19,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 20
+	}, 	
+	"10-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"11-L" : {
+		"ECperBlock": 20,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 81
+	},			
+	"11-M" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 50,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 51
+	}, 	
+	"11-Q" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 22,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 23
+	},	
+	"11-H" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 12,
+		"numBlocksGroup2": 8,
+		"numCodewordsInGroup2Blocks" : 13
+	}, 	
+	"12-L" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 92,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 93
+	}, 	
+	"12-M" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 36,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 37
+	}, 	
+	"12-Q" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 20,
+		"numBlocksGroup2": 6,
+		"numCodewordsInGroup2Blocks" : 21
+	}, 	
+	"12-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 7,
+		"numCodewordsInGroup1Blocks" : 14,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 15
+	}, 	
+	"13-L" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 107
+	},			
+	"13-M" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 8,
+		"numCodewordsInGroup1Blocks" : 37,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 38
+	}, 	
+	"13-Q" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 8,
+		"numCodewordsInGroup1Blocks" : 20,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 21
+	}, 	
+	"13-H" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 12,
+		"numCodewordsInGroup1Blocks" : 11,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 12
+	}, 	
+	"14-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 115,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 116
+	}, 	
+	"14-M" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 40,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 41
+	}, 	
+	"14-Q" : {
+		"ECperBlock": 20,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 16,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 17
+	}, 	
+	"14-H" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 12,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 13
+	}, 	
+	"15-L" : {
+		"ECperBlock": 22,
+		"numBlocksGroup1": 5,
+		"numCodewordsInGroup1Blocks" : 87,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 88
+	}, 	
+	"15-M" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 5,
+		"numCodewordsInGroup1Blocks" : 41,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 42
+	}, 	
+	"15-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 5,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"15-H" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 12,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 13
+	}, 	
+	"16-L" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 5,
+		"numCodewordsInGroup1Blocks" : 98,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 99
+	}, 	
+	"16-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 7,
+		"numCodewordsInGroup1Blocks" : 45,
+		"numBlocksGroup2": 3,
+		"numCodewordsInGroup2Blocks" : 46
+	}, 	
+	"16-Q" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 15,
+		"numCodewordsInGroup1Blocks" : 19,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 20
+	}, 	
+	"16-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 13,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"17-L" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 107,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 108
+	}, 	
+	"17-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 10,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"17-Q" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 22,
+		"numBlocksGroup2": 15,
+		"numCodewordsInGroup2Blocks" : 23
+	}, 	
+	"17-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 14,
+		"numBlocksGroup2": 17,
+		"numCodewordsInGroup2Blocks" : 15
+	}, 	
+	"18-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 5,
+		"numCodewordsInGroup1Blocks" : 120,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 121
+	}, 	
+	"18-M" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 9,
+		"numCodewordsInGroup1Blocks" : 43,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 44
+	}, 	
+	"18-Q" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 22,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 23
+	}, 	
+	"18-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 14,
+		"numBlocksGroup2": 19,
+		"numCodewordsInGroup2Blocks" : 15
+	}, 	
+	"19-L" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 113,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 114
+	}, 	
+	"19-M" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 44,
+		"numBlocksGroup2": 11,
+		"numCodewordsInGroup2Blocks" : 45
+	}, 	
+	"19-Q" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 21,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 22
+	}, 	
+	"19-H" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 9,
+		"numCodewordsInGroup1Blocks" : 13,
+		"numBlocksGroup2": 16,
+		"numCodewordsInGroup2Blocks" : 14
+	}, 	
+	"20-L" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 107,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 108
+	}, 	
+	"20-M" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 41,
+		"numBlocksGroup2": 13,
+		"numCodewordsInGroup2Blocks" : 42
+	}, 	
+	"20-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 15,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"20-H" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 15,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 10,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"21-L" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 116,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 117
+	}, 	
+	"21-M" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 42
+	},			
+	"21-Q" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 22,
+		"numBlocksGroup2": 6,
+		"numCodewordsInGroup2Blocks" : 23
+	}, 	
+	"21-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 19,
+		"numCodewordsInGroup1Blocks" : 16,
+		"numBlocksGroup2": 6,
+		"numCodewordsInGroup2Blocks" : 17
+	}, 	
+	"22-L" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 111,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 112
+	}, 	
+	"22-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 46
+	},			
+	"22-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 7,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 16,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"22-H" : {
+		"ECperBlock": 24,
+		"numBlocksGroup1": 34,
+		"numCodewordsInGroup1Blocks" : 13
+	},			
+	"23-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 121,
+		"numBlocksGroup2": 5,
+		"numCodewordsInGroup2Blocks" : 122
+	}, 	
+	"23-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"23-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"23-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 16,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"24-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 117,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 118
+	}, 	
+	"24-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 45,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 46
+	}, 	
+	"24-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 16,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"24-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 30,
+		"numCodewordsInGroup1Blocks" : 16,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 17
+	}, 	
+	"25-L" : {
+		"ECperBlock": 26,
+		"numBlocksGroup1": 8,
+		"numCodewordsInGroup1Blocks" : 106,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 107
+	}, 	
+	"25-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 8,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 13,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"25-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 7,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 22,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"25-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 22,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 13,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"26-L" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 10,
+		"numCodewordsInGroup1Blocks" : 114,
+		"numBlocksGroup2": 2,
+		"numCodewordsInGroup2Blocks" : 115
+	}, 	
+	"26-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 19,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"26-Q" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 28,
+		"numCodewordsInGroup1Blocks" : 22,
+		"numBlocksGroup2": 6,
+		"numCodewordsInGroup2Blocks" : 23
+	}, 	
+	"26-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 33,
+		"numCodewordsInGroup1Blocks" : 16,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 17
+	}, 	
+	"27-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 8,
+		"numCodewordsInGroup1Blocks" : 122,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 123
+	}, 	
+	"27-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 22,
+		"numCodewordsInGroup1Blocks" : 45,
+		"numBlocksGroup2": 3,
+		"numCodewordsInGroup2Blocks" : 46
+	}, 	
+	"27-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 8,
+		"numCodewordsInGroup1Blocks" : 23,
+		"numBlocksGroup2": 26,
+		"numCodewordsInGroup2Blocks" : 24
+	}, 	
+	"27-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 12,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 28,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"28-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 117,
+		"numBlocksGroup2": 10,
+		"numCodewordsInGroup2Blocks" : 118
+	}, 	
+	"28-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 3,
+		"numCodewordsInGroup1Blocks" : 45,
+		"numBlocksGroup2": 23,
+		"numCodewordsInGroup2Blocks" : 46
+	}, 	
+	"28-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 31,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"28-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 31,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"29-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 7,
+		"numCodewordsInGroup1Blocks" : 116,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 117
+	}, 	
+	"29-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 21,
+		"numCodewordsInGroup1Blocks" : 45,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 46
+	}, 	
+	"29-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 1,
+		"numCodewordsInGroup1Blocks" : 23,
+		"numBlocksGroup2": 37,
+		"numCodewordsInGroup2Blocks" : 24
+	}, 	
+	"29-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 19,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 26,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"30-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 5,
+		"numCodewordsInGroup1Blocks" : 115,
+		"numBlocksGroup2": 10,
+		"numCodewordsInGroup2Blocks" : 116
+	}, 	
+	"30-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 19,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 10,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"30-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 15,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 25,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"30-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 23,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 25,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"31-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 13,
+		"numCodewordsInGroup1Blocks" : 115,
+		"numBlocksGroup2": 3,
+		"numCodewordsInGroup2Blocks" : 116
+	}, 	
+	"31-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 29,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"31-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 42,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"31-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 23,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 28,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"32-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 115
+	},			
+	"32-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 10,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 23,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"32-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 10,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 35,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"32-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 19,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 35,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"33-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 115,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 116
+	}, 	
+	"33-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 14,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 21,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"33-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 29,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 19,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"33-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 11,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 46,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"34-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 13,
+		"numCodewordsInGroup1Blocks" : 115,
+		"numBlocksGroup2": 6,
+		"numCodewordsInGroup2Blocks" : 116
+	}, 	
+	"34-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 14,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 23,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"34-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 44,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"34-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 59,
+		"numCodewordsInGroup1Blocks" : 16,
+		"numBlocksGroup2": 1,
+		"numCodewordsInGroup2Blocks" : 17
+	}, 	
+	"35-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 12,
+		"numCodewordsInGroup1Blocks" : 121,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 122
+	}, 	
+	"35-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 12,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 26,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"35-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 39,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"35-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 22,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 41,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"36-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 121,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 122
+	}, 	
+	"36-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 6,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 34,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"36-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 46,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 10,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"36-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 2,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 64,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"37-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 17,
+		"numCodewordsInGroup1Blocks" : 122,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 123
+	}, 	
+	"37-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 29,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"37-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 49,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 10,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"37-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 24,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 46,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"38-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 4,
+		"numCodewordsInGroup1Blocks" : 122,
+		"numBlocksGroup2": 18,
+		"numCodewordsInGroup2Blocks" : 123
+	}, 	
+	"38-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 13,
+		"numCodewordsInGroup1Blocks" : 46,
+		"numBlocksGroup2": 32,
+		"numCodewordsInGroup2Blocks" : 47
+	}, 	
+	"38-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 48,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 14,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"38-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 42,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 32,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"39-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 20,
+		"numCodewordsInGroup1Blocks" : 117,
+		"numBlocksGroup2": 4,
+		"numCodewordsInGroup2Blocks" : 118
+	}, 	
+	"39-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 40,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 7,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"39-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 43,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 22,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"39-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 10,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 67,
+		"numCodewordsInGroup2Blocks" : 16
+	}, 	
+	"40-L" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 19,
+		"numCodewordsInGroup1Blocks" : 118,
+		"numBlocksGroup2": 6,
+		"numCodewordsInGroup2Blocks" : 119
+	}, 	
+	"40-M" : {
+		"ECperBlock": 28,
+		"numBlocksGroup1": 18,
+		"numCodewordsInGroup1Blocks" : 47,
+		"numBlocksGroup2": 31,
+		"numCodewordsInGroup2Blocks" : 48
+	}, 	
+	"40-Q" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 34,
+		"numCodewordsInGroup1Blocks" : 24,
+		"numBlocksGroup2": 34,
+		"numCodewordsInGroup2Blocks" : 25
+	}, 	
+	"40-H" : {
+		"ECperBlock": 30,
+		"numBlocksGroup1": 20,
+		"numCodewordsInGroup1Blocks" : 15,
+		"numBlocksGroup2": 61,
+		"numCodewordsInGroup2Blocks" : 16
+	}
+}

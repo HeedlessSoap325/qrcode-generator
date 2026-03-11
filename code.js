@@ -1,4 +1,5 @@
 import capacities from "./capacities.json" with { type: "json" };
+import structuring from "./structuring.json" with { type: "json" };
 
 const PIXELSIZE = 8;
 
@@ -369,8 +370,10 @@ function structureData(info, input) {
 	// TODO: these blocks should each generate EC, and then be ordered very specifically.
 	const rawData = encodeData(info, input);
 
-	const errorCorrection = generateEC(rawData, 7); // TODO: unhardcode this and use JSON File for Query
-	console.log("errorCorrection =", errorCorrection)
+	const structure = structuring[`${info.version}-${info.errorCorrection}`];
+
+	const numEcCodewords = structure["ECperBlock"];
+	const errorCorrection = generateEC(rawData, numEcCodewords);
 
 	return [...rawData, ...errorCorrection];
 }
