@@ -343,26 +343,13 @@ function generateEC(data, numEcCodewords) {
 	initGF();
 
 	const generator = generateGeneratorPolynomial(numEcCodewords);
-
-	// Convert from binary values to integers
-	const codewords = [];
-	for (let i = 0; i < (data.length / 8); i++) {
-		const num = bitsToInt(data.slice((i * 8), ((i + 1) * 8)));
-		codewords.push(num);
-	}
 	
 	// shift message polynomial numEcCodewords times to the left.
-	const paddedData = codewords.concat(new Array(numEcCodewords).fill(0));
+	const paddedData = data.concat(new Array(numEcCodewords).fill(0));
 
 	const remainder = dividePolynomial(paddedData, generator);
 
-	// Convert from integer values to binary
-	let ecCodewords = [];
-	for (let i = 0; i < remainder.length; i++) {
-		const bin = intToBitsFixed(remainder[i], 8);
-		ecCodewords = [...ecCodewords, ...bin];
-	}
-	return ecCodewords;
+	return remainder;
 }
 
 function structureData(info, input) {
@@ -372,10 +359,57 @@ function structureData(info, input) {
 
 	const structure = structuring[`${info.version}-${info.errorCorrection}`];
 
-	const numEcCodewords = structure["ECperBlock"];
-	const errorCorrection = generateEC(rawData, numEcCodewords);
+	// blockLengths will contain the number of integers, each block should contain
+	let blockLengths = Array(structure["numBlocksGroup1"]).fill(structure["numCodewordsInGroup1Blocks"]);
 
-	return [...rawData, ...errorCorrection];
+	if (structure.hasOwnProperty("numBlocksGroup2")) {
+		const arr = Array(structure["numBlocksGroup2"]).fill(structure["numCodewordsInGroup2Blocks"]);
+		blockLengths = [...blockLengths, ...arr] ;
+	}
+
+	// Convert from bits to integers
+	const codewords = [];
+	for (let i = 0; i < (rawData.length / 8); i++) {
+		const num = bitsToInt(rawData.slice((i * 8), ((i + 1) * 8)));
+		codewords.push(num);
+	}
+
+	// Split Data Codewords according to blockLengths
+	let start = 0;
+	const dataBlocks = blockLengths.map(len => {
+		const chunk = codewords.slice(start, start + len);
+		start += len;
+		return chunk;
+	});
+
+	const numEcCodewords = structure["ECperBlock"];
+
+	// Generate EC Blocks with data of each Data Block
+	const ecBlocks = [];
+	for (let it = 0; it < dataBlocks.length; it++) {
+		const errorCorrection = generateEC(dataBlocks[it], numEcCodewords);
+		ecBlocks.push(errorCorrection);
+	}
+
+	let structuredData = [];
+
+	// Place Data Codewords (see ISO)
+	for (let col = 0; col < Math.max(...blockLengths); col++) {
+		for (let row = 0; row < dataBlocks.length; row++) {
+			if (dataBlocks[row].length > col) {
+				structuredData = [...structuredData, ...intToBitsFixed(dataBlocks[row][col], 8)];
+			}
+		}
+	}
+
+	// Place EC Codewords (see ISO)
+	for (let col = 0; col < numEcCodewords; col++) {
+		for (let row = 0; row < dataBlocks.length; row++) {
+			structuredData = [...structuredData, ...intToBitsFixed(ecBlocks[row][col], 8)];
+		}
+	}
+	
+	return structuredData;
 }
 
 function generateBCH(data, dataLen, totalLen, generator, mask) {
