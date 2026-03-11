@@ -274,6 +274,107 @@ function encodeData(info, input) {
 	return ret;
 }
 
+function generateEC(data, numEcCodewords) {
+	const EXP = new Array(512); // int to exponent
+	const LOG = new Array(256); // exponent to int
+
+	function initGF() {
+		let x = 1;
+
+        for (let i = 0; i < 255; i++) {
+            EXP[i] = x;
+            LOG[x] = i;
+            x <<= 1; // next power of 2
+            if (x & 0x100) { // if greater than 256
+                x ^= 0x11d; // mod 285 (see ISO QR-Code specification)
+            }
+        }
+
+        for (let i = 255; i < 512; i++) {
+            EXP[i] = EXP[i - 255]; // map values >= 255 to mod 255
+        }
+	}
+
+	/*
+		Multiply two powers of alpha
+	*/
+	function multiplyGF(a, b) {
+		if (a === 0 || b === 0) return 0;
+		return EXP[LOG[a] + LOG[b]]; // Multiplication with Logs and Antilogs
+	}
+
+	function multiplyPolynomial(poly1, poly2) {
+		const result = new Array(poly1.length + poly2.length - 1).fill(0);
+
+		// Multiply each coefficient in poly1, with each coefficient of poly2
+		for (let i = 0; i < poly1.length; i++ ) {
+			for (let j = 0; j < poly2.length; j++) {
+				result[i + j] ^= multiplyGF(poly1[i], poly2[j]); // multiply alpha exponents safely and set result
+			}
+		}
+		return result;
+	}
+
+	function dividePolynomial(poly1, poly2) {
+        const result = poly1.slice();
+
+        for (let i = 0; i < (poly1.length - poly2.length + 1); i++) {
+            const coef = result[i]; // Get current coefficient 
+            if (coef !== 0) {
+                for (let j = 0; j < poly2.length; j++) {
+                    result[i + j] ^= multiplyGF(poly2[j], coef); // Effectively multiply poly1 by 1/coef
+                }
+            }
+        }
+        return result.slice(result.length - (poly2.length - 1));
+    }
+
+
+	function generateGeneratorPolynomial(degree) {
+		let poly = [1]; // start polynomial is (1x - a^0) (1 in alpha notation is 0, so 1x is irrelevant)
+		for (let i = 0; i < degree; i++) {
+			poly = multiplyPolynomial(poly, [1, EXP[i]]); // Multiply by (1x - a^i)
+		}
+		return poly;
+	}
+
+	// EC Codeword Generation
+	initGF();
+
+	const generator = generateGeneratorPolynomial(numEcCodewords);
+
+	// Convert from binary values to integers
+	const codewords = [];
+	for (let i = 0; i < (data.length / 8); i++) {
+		const num = bitsToInt(data.slice((i * 8), ((i + 1) * 8)));
+		codewords.push(num);
+	}
+	
+	// shift message polynomial numEcCodewords times to the left.
+	const paddedData = codewords.concat(new Array(numEcCodewords).fill(0));
+
+	const remainder = dividePolynomial(paddedData, generator);
+
+	// Convert from integer values to binary
+	let ecCodewords = [];
+	for (let i = 0; i < remainder.length; i++) {
+		const bin = intToBitsFixed(remainder[i], 8);
+		ecCodewords = [...ecCodewords, ...bin];
+	}
+	return ecCodewords;
+}
+
+function structureData(info, input) {
+	// TODO: this Function doesn't work like it should, the Data should be divided into blocks
+	// TODO: these blocks should each generate EC, and then be ordered very specifically.
+	const rawData = encodeData(info, input);
+
+	const errorCorrection = generateEC(rawData, 7); // TODO: unhardcode this and use JSON File for Query
+	console.log("errorCorrection =", errorCorrection)
+
+	return [...rawData, ...errorCorrection];
+}
+
 function generateBCH(data, dataLen, totalLen, generator, mask) {
 	let ret = 0;
 	ret = data << (totalLen - dataLen); // shift left (totalLen - dataLen) bits
@@ -510,9 +611,7 @@ function generate(input, errorCorrection) {
 	setQrCodeArea(qrcode, info.dimensions, 6, 8, 1, timingPatternLen, timingPattern, MODULE_TIMING_FLAG); // Top left to Bottom left
 	setQrCodeArea(qrcode, info.dimensions, 8, 6, timingPatternLen, 1, timingPattern, MODULE_TIMING_FLAG); // Top left to Top right
 
-	const data = encodeData(info, input);
-
-	//TODO: Error Correction
+	const data = structureData(info, input);
 
 	const maskIndex = determinMask(qrcode, info, data);
 
