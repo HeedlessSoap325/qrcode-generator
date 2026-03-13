@@ -6,8 +6,8 @@
 		- https://en.wikipedia.org/wiki/BCH_code#Systematic_encoding:_The_message_as_a_prefix
 */
 
-import capacities from "./capacities.json" with { type: "json" };
-import structuring from "./structuring.json" with { type: "json" };
+import capacities from "$lib/data/capacities.json";
+import structuring from "$lib/data/structuring.json";
 
 const PIXELSIZE = 8;
 
