@@ -1,3 +1,11 @@
+/*
+	This Code is mostely based on multiple sources and helpful pages, listed below:
+		- ISO: https://www.arscreatio.com/repositorio/images/n_23/SC031-N-1915-18004Text.pdf
+		- https://perthirtysix.com/how-the-heck-do-qr-codes-work
+		- https://www.thonky.com/qr-code-tutorial
+		- https://en.wikipedia.org/wiki/BCH_code#Systematic_encoding:_The_message_as_a_prefix
+*/
+
 import capacities from "./capacities.json" with { type: "json" };
 import structuring from "./structuring.json" with { type: "json" };
 
