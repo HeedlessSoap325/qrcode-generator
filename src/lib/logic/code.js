@@ -628,7 +628,7 @@ function determinMask(qrcode, info, data) {
 	return bestMask;
 }
 
-function generate(input, errorCorrection) {
+export function generate(input, errorCorrection) {
 	const info = determinQRCodeInfo(input, errorCorrection);
 	const qrcode = Array.from({length: info.dimensions**2}).fill(0);
 
@@ -671,10 +671,7 @@ function generate(input, errorCorrection) {
 	return [ qrcode, info.dimensions ];
 }
 
-function drawQrCode(qrcode, qrcodeDimensions) {
-	const canvas = document.getElementById("qrcode");
-	const canvasctx = canvas.getContext("2d");
-
+export function drawQrCode(canvasctx, qrcode, qrcodeDimensions) {
 	canvasctx.canvas.width  = qrcodeDimensions * PIXELSIZE;
 	canvasctx.canvas.height = qrcodeDimensions * PIXELSIZE;
 
@@ -687,10 +684,3 @@ function drawQrCode(qrcode, qrcodeDimensions) {
 		canvasctx.fillRect(x * PIXELSIZE, y * PIXELSIZE, PIXELSIZE, PIXELSIZE);
 	}
 }
-
-const inputData = document.getElementById("input");
-const errorLevel = document.getElementById("errorlvl");
-
-drawQrCode(...generate(inputData.value, errorLevel.value));
-inputData.addEventListener("input", () => drawQrCode(...generate(inputData.value, errorLevel.value)));
-errorLevel.addEventListener("input", () => drawQrCode(...generate(inputData.value, errorLevel.value)));

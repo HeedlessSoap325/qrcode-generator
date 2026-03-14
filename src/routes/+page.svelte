@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { generate, drawQrCode } from "$lib/logic/code.js";
 
 	let canvas!: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
 	let input: string = $state("Some Text");
-	let errorCorection: string = $state("L");
+	let errorCorrection: string = $state("L");
 
 	onMount(() => {
 		ctx = canvas.getContext("2d");
-		//TODO: draw
+
+		drawQrCode(ctx, ...generate(input, errorCorrection));
 	});
 
 	$effect(() => {
 		if (ctx) {
-			console.log(`rerender (input='${input}', errorCorrection='${errorCorection}')`)
-			//TODO: draw
+			drawQrCode(ctx, ...generate(input, errorCorrection));
 		}
 	});
 </script>
@@ -26,7 +27,7 @@
 
 	<div id="errorCorrectionRow">
 		<label for="errorlvl">Error Correction:</label>
-		<select id="errorlvl" bind:value={errorCorection}>
+		<select id="errorlvl" bind:value={errorCorrection}>
 			<option value="L">L</option>
 			<option value="M">M</option>
 			<option value="Q">Q</option>
