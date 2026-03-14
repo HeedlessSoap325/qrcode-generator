@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { generate, drawQrCode } from "$lib/logic/code.js";
+	import { generate, drawQrCode, type QRCodeErrorCorrection } from "$lib/logic/qrcode.ts";
 
 	let canvas!: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
 	let input: string = $state("Some Text");
-	let errorCorrection: string = $state("L");
+	let errorCorrection: QRCodeErrorCorrection = $state("L");
 
 	onMount(() => {
 		ctx = canvas.getContext("2d");
 
-		drawQrCode(ctx, ...generate(input, errorCorrection));
+		drawQrCode(ctx!, ...generate(input, errorCorrection));
 	});
 
 	$effect(() => {

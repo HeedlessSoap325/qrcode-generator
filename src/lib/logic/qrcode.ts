@@ -6,8 +6,50 @@
 		- https://en.wikipedia.org/wiki/BCH_code#Systematic_encoding:_The_message_as_a_prefix
 */
 
-import capacities from "$lib/data/capacities.json";
-import structuring from "$lib/data/structuring.json";
+import capacitiesFile from "$lib/data/capacities.json";
+import structuringFile from "$lib/data/structuring.json";
+
+type QRCode = number[];
+
+export type QRCodeErrorCorrection = "L" | "M" | "Q" | "H";
+
+type QRCodeEncoding = "byte" | "numeric" | "alphanumeric";
+
+type QRCodePoly = number[];
+
+interface QrCodeInfo {
+	version: number,
+	encoding: QRCodeEncoding,
+	limit: number,
+	errorCorrection: QRCodeErrorCorrection,
+	maxCodewords: number,
+	dimensions: number,
+};
+
+interface QRCapacity {
+	numeric: number,
+	alphanumeric: number,
+	byte: number,
+	maxCodewords: number,
+};
+
+type QRErrorLevels = Record<QRCodeErrorCorrection, QRCapacity>;
+
+type QRCapacities = Record<string, QRErrorLevels>;
+
+
+interface QRStructure {
+	ECperBlock: number,
+	numBlocksGroup1: number,
+	numCodewordsInGroup1Blocks: number,
+	numBlocksGroup2?: number,
+	numCodewordsInGroup2Blocks?: number,
+};
+
+type QRStructuring = Record<string, QRStructure>;
+
+const capacities = capacitiesFile as QRCapacities;
+const structuring = structuringFile as QRStructuring;
 
 const PIXELSIZE = 8;
 
@@ -53,11 +95,7 @@ const ALPHANUMERIC_LOOKUP_TABLE = [
 	" ", "$", "%", "*", "+", "-", ".", "/", ":"
 ];
 
-function intToBits(n) {
-    return n.toString(2).split('').map(Number);
-}
-
-function intToBitsFixed(n, length) {
+function intToBitsFixed(n: number, length: number): number[] {
     if (n < 0) {
         throw new Error("Only non-negative integers supported");
     }
@@ -77,11 +115,11 @@ function intToBitsFixed(n, length) {
     return bits;
 }
 
-function bitsToInt(bits) {
+function bitsToInt(bits: number[]): number {
     return parseInt(bits.join(''), 2);
 }
 
-function mod2Division(dividend, divisor) {
+function mod2Division(dividend: number[], divisor: number[]): number[] {
     let remainder = dividend.slice();
     for (let i = 0; i <= remainder.length - divisor.length; i++) {
         if (remainder[i] === 1) {
@@ -106,7 +144,7 @@ function mod2Division(dividend, divisor) {
 		y: 4, x: 2 to 1
 		y: 4, x: 3 to 1
 */
-function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data, flags = 0) {
+function setQrCodeArea(qrcode: QRCode, qrcodeDimensions: number, x: number, y: number, w: number, h: number, data: number[], flags: number = 0): void {
 	if (data.length < (w * h)) {
 		console.error(`setQrCodeArea: length of data (${data.length}) is less than expected (${w * h})`);
 		return;
@@ -129,7 +167,7 @@ function setQrCodeArea(qrcode, qrcodeDimensions, x, y, w, h, data, flags = 0) {
 // Source - https://stackoverflow.com/a/73349304
 // Posted by YourMJK, modified by community. See post 'Timeline' for change history
 // Retrieved 2026-02-18, License - CC BY-SA 4.0
-function setAlignmentPatterns(qrcode, info) {
+function setAlignmentPatterns(qrcode: QRCode, info: QrCodeInfo): void {
     if (info.version <= 1) return;
 	let coordinates = [];
     let intervals = Math.floor((info.version / 7)) + 1;  // Number of gaps between alignment patterns
@@ -151,7 +189,7 @@ function setAlignmentPatterns(qrcode, info) {
 	}
 }
 
-function determinEncoding(text) {
+function determinEncoding(text: string): QRCodeEncoding {
 	if (/^[0-9]+$/.test(text)) {
 		return "numeric";
 	} else if (/^[0-9A-Z \$%\*\+\-\.\/:]+$/.test(text)) {
@@ -161,7 +199,7 @@ function determinEncoding(text) {
 	}
 }
 
-function determinQRCodeInfo(input, errorCorrection) {
+function determinQRCodeInfo(input: string, errorCorrection: QRCodeErrorCorrection): QrCodeInfo {
 	const encoding = determinEncoding(input);
 
 	for(let i = 1; i <= 40; i++) {
@@ -179,6 +217,8 @@ function determinQRCodeInfo(input, errorCorrection) {
 			};
 		}
 	}
+
+	throw new Error("Unreachable");
 }
 
 /*
@@ -193,7 +233,7 @@ function determinQRCodeInfo(input, errorCorrection) {
 		...
 	]
 */
-function encodeData(info, input) {
+function encodeData(info: QrCodeInfo, input: string): number[] {
 	// Version    Numeric   Alphanumeric   byte
 	// 1  to 9    10        9              8
 	// 10 to 26   12        11             16
@@ -203,7 +243,7 @@ function encodeData(info, input) {
 		data = input.slice(0, info.limit);
 	}
 
-	let ret = [];
+	let ret: number[] = [];
 
 	if(info.encoding === "numeric") {
 		const mode 	= intToBitsFixed(1, 4); // 0001 is the mode indicator for numbers
@@ -283,7 +323,7 @@ function encodeData(info, input) {
 	return ret;
 }
 
-function generateEC(data, numEcCodewords) {
+function generateEC(data: number[], numEcCodewords: number): number[] {
 	const EXP = new Array(512); // int to exponent
 	const LOG = new Array(256); // exponent to int
 
@@ -307,12 +347,12 @@ function generateEC(data, numEcCodewords) {
 	/*
 		Multiply two powers of alpha
 	*/
-	function multiplyGF(a, b) {
+	function multiplyGF(a: number, b: number): number {
 		if (a === 0 || b === 0) return 0;
 		return EXP[LOG[a] + LOG[b]]; // Multiplication with Logs and Antilogs
 	}
 
-	function multiplyPolynomial(poly1, poly2) {
+	function multiplyPolynomial(poly1: QRCodePoly, poly2: QRCodePoly): QRCodePoly {
 		const result = new Array(poly1.length + poly2.length - 1).fill(0);
 
 		// Multiply each coefficient in poly1, with each coefficient of poly2
@@ -324,7 +364,7 @@ function generateEC(data, numEcCodewords) {
 		return result;
 	}
 
-	function dividePolynomial(poly1, poly2) {
+	function dividePolynomial(poly1: QRCodePoly, poly2: QRCodePoly): QRCodePoly {
         const result = poly1.slice();
 
         for (let i = 0; i < (poly1.length - poly2.length + 1); i++) {
@@ -339,7 +379,7 @@ function generateEC(data, numEcCodewords) {
     }
 
 
-	function generateGeneratorPolynomial(degree) {
+	function generateGeneratorPolynomial(degree: number): QRCodePoly {
 		let poly = [1]; // start polynomial is (1x - a^0) (1 in alpha notation is 0, so 1x is irrelevant)
 		for (let i = 0; i < degree; i++) {
 			poly = multiplyPolynomial(poly, [1, EXP[i]]); // Multiply by (1x - a^i)
@@ -360,7 +400,7 @@ function generateEC(data, numEcCodewords) {
 	return remainder;
 }
 
-function structureData(info, input) {
+function structureData(info: QrCodeInfo, input: string): number[] {
 	// TODO: this Function doesn't work like it should, the Data should be divided into blocks
 	// TODO: these blocks should each generate EC, and then be ordered very specifically.
 	const rawData = encodeData(info, input);
@@ -376,7 +416,7 @@ function structureData(info, input) {
 	}
 
 	// Convert from bits to integers
-	const codewords = [];
+	const codewords: number[] = [];
 	for (let i = 0; i < (rawData.length / 8); i++) {
 		const num = bitsToInt(rawData.slice((i * 8), ((i + 1) * 8)));
 		codewords.push(num);
@@ -399,7 +439,7 @@ function structureData(info, input) {
 		ecBlocks.push(errorCorrection);
 	}
 
-	let structuredData = [];
+	let structuredData: number[] = [];
 
 	// Place Data Codewords (see ISO)
 	for (let col = 0; col < Math.max(...blockLengths); col++) {
@@ -420,7 +460,7 @@ function structureData(info, input) {
 	return structuredData;
 }
 
-function generateBCH(data, dataLen, totalLen, generator, mask) {
+function generateBCH(data: number, dataLen: number, totalLen: number, generator: number[], mask: number): number {
 	let ret = 0;
 	ret = data << (totalLen - dataLen); // shift left (totalLen - dataLen) bits
 
@@ -436,7 +476,7 @@ function generateBCH(data, dataLen, totalLen, generator, mask) {
 	return ret;
 }
 
-function setFormatInformation(qrcode, info, maskIndex) {
+function setFormatInformation(qrcode: QRCode, info: QrCodeInfo, maskIndex: number): void {
 	let data = 0b0;
 
 	if (maskIndex < 0 || maskIndex > 7) {
@@ -471,22 +511,22 @@ function setFormatInformation(qrcode, info, maskIndex) {
 
 
 	if(info.version > 6) { // Version Information is required for all QR codes over version 6
-		let data = generateBCH(info.version, 6, 18, VERSION_INFORMATION_GENERATOR, 0);
-		data = intToBitsFixed(data, 18); // Final 18-bit version string
-		data = data.reverse(); // Least significant Bit first
+		let versionInfo: number | number[] = generateBCH(info.version, 6, 18, VERSION_INFORMATION_GENERATOR, 0);
+		versionInfo = intToBitsFixed(versionInfo, 18); // Final 18-bit version string
+		versionInfo = versionInfo.reverse(); // Least significant Bit first
 
 		// Tanspose
-		const data1 = new Array(data.length);
-		for (let i = 0; i < data.length; i++) {
-			data1[(i % 3) * 6 + Math.floor(i / 3)] = data[i];
+		const data1 = new Array(versionInfo.length);
+		for (let i = 0; i < versionInfo.length; i++) {
+			data1[(i % 3) * 6 + Math.floor(i / 3)] = versionInfo[i];
 		}
 
-		setQrCodeArea(qrcode, info.dimensions, (info.dimensions - 11), 0, 3, 6, data, MODULE_FORMAT_FLAG); //Top right
+		setQrCodeArea(qrcode, info.dimensions, (info.dimensions - 11), 0, 3, 6, versionInfo, MODULE_FORMAT_FLAG); //Top right
 		setQrCodeArea(qrcode, info.dimensions, 0, (info.dimensions - 11), 6, 3, data1, MODULE_FORMAT_FLAG); //Bottom left
 	}
 }
 
-function placeDataInQrCode(qrcode, info, data) {
+function placeDataInQrCode(qrcode: QRCode, info: QrCodeInfo, data: number[]): void {
 	let dataIdx = 0;
 	let encounteredTimingPattern = false;
 
@@ -517,7 +557,7 @@ function placeDataInQrCode(qrcode, info, data) {
 	}
 }
 
-function maskQrCode(qrcode, info, maskIndex) {
+function maskQrCode(qrcode: QRCode, info: QrCodeInfo, maskIndex: number): void {
 	if (maskIndex < 0 || maskIndex > 7) {
 		console.error(`maskQrCode: invalid maskindex (${maskIndex}) provided. Must be from 0 to 7`);
 		return;
@@ -545,12 +585,12 @@ function maskQrCode(qrcode, info, maskIndex) {
 	}
 }
 
-function evaluateMaskScore(qrcode, info) {
-	function get(y,x) { return qrcode[y * info.dimensions + x] & MODULE_BLACK_FLAG; }
+function evaluateMaskScore(qrcode: QRCode, info: QrCodeInfo): number {
+	function get(y: number, x: number) { return qrcode[y * info.dimensions + x] & MODULE_BLACK_FLAG; }
 	let score = 0;
 
 	// Rule 1
-	function scan(map) { // map is a function, mapping i and j to x and y
+	function scan(map: (r: number, c: number) => [number, number]) { // map is a function, mapping i and j to x and y
 		for (let i = 0; i < info.dimensions; i++) {
 			let run = 1;
 			for (let j = 1; j < info.dimensions; j++) {
@@ -584,7 +624,7 @@ function evaluateMaskScore(qrcode, info) {
 	// Rule 3
 	const pattern = [1,0,1,1,1,0,1,0,0,0,0];
 
-	function check(map) { // map is a function, mapping i and j to x and y
+	function check(map: (r: number, c: number) => [number, number]) { // map is a function, mapping i and j to x and y
 		for (let i = 0; i < info.dimensions; i++) {
 			for (let j = 0; j <= (info.dimensions - 11); j++){
 				let k = 0;
@@ -604,7 +644,7 @@ function evaluateMaskScore(qrcode, info) {
 	return score;
 }
 
-function determinMask(qrcode, info, data) {
+function determinMask(qrcode: QRCode, info: QrCodeInfo, data: number[]): number {
 	let bestMask = 0;
 	let bestScore = Infinity;
 
@@ -628,13 +668,13 @@ function determinMask(qrcode, info, data) {
 	return bestMask;
 }
 
-export function generate(input, errorCorrection) {
-	const info = determinQRCodeInfo(input, errorCorrection);
-	const qrcode = Array.from({length: info.dimensions**2}).fill(0);
+export function generate(input: string, errorCorrection: QRCodeErrorCorrection): [QRCode, number] {
+	const info: QrCodeInfo = determinQRCodeInfo(input, errorCorrection);
+	const qrcode: QRCode = Array.from<number>({length: info.dimensions**2}).fill(0);
 
 	console.groupCollapsed("generate: Expected warnings");
 
-	const finderSeperator = Array.from({length: 8}).fill(0);
+	const finderSeperator: number[] = Array.from<number>({length: 8}).fill(0);
 
 	setQrCodeArea(qrcode, info.dimensions, 0, 0, 7, 7, FINDER_PATTERN,  MODULE_FINDER_FLAG); // Top left
 	setQrCodeArea(qrcode, info.dimensions, 7, 0, 1, 8, finderSeperator, MODULE_FINDER_FLAG); // Top to bottom
@@ -651,7 +691,7 @@ export function generate(input, errorCorrection) {
 	setAlignmentPatterns(qrcode, info);
 
 	const timingPatternLen = info.dimensions - 16;
-	const timingPattern = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
+	const timingPattern: number[] = Array.from({ length: timingPatternLen }, (_, i) => (i % 2 === 0 ? 1 : 0));
 
 	setQrCodeArea(qrcode, info.dimensions, 6, 8, 1, timingPatternLen, timingPattern, MODULE_TIMING_FLAG); // Top left to Bottom left
 	setQrCodeArea(qrcode, info.dimensions, 8, 6, timingPatternLen, 1, timingPattern, MODULE_TIMING_FLAG); // Top left to Top right
@@ -671,7 +711,7 @@ export function generate(input, errorCorrection) {
 	return [ qrcode, info.dimensions ];
 }
 
-export function drawQrCode(canvasctx, qrcode, qrcodeDimensions) {
+export function drawQrCode(canvasctx: CanvasRenderingContext2D, qrcode: QRCode, qrcodeDimensions: number): void {
 	canvasctx.canvas.width  = qrcodeDimensions * PIXELSIZE;
 	canvasctx.canvas.height = qrcodeDimensions * PIXELSIZE;
 
