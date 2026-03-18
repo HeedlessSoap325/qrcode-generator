@@ -10,11 +10,11 @@
 	let showQrSections: boolean = $state(false);
 	let qrDownload: HTMLAnchorElement;
 	const renderSettings: QrRenderInfo[] = [
-		{ mask: MODULE_FINDER_FLAG, 	hexDarkColor: "#d55e00", hexLightColor: "#fcefe6" },
-		{ mask: MODULE_TIMING_FLAG, 	hexDarkColor: "#f0e442", hexLightColor: "#fdfce7" },
-		{ mask: MODULE_ALIGNMENT_FLAG,	hexDarkColor: "#009e73", hexLightColor: "#e6f4f1" },
-		{ mask: MODULE_FORMAT_FLAG, 	hexDarkColor: "#0072b2", hexLightColor: "#fcfdfe" },
-		{ mask: MODULE_DATA_FLAG, 		hexDarkColor: "#cc79a7", hexLightColor: "#f9eef4" },
+		{ mask: MODULE_FINDER_FLAG, 	hexDarkColor: "#d55e00", hexLightColor: "#f2ceb2" },
+		{ mask: MODULE_TIMING_FLAG, 	hexDarkColor: "#f0e442", hexLightColor: "#faf6c6" },
+		{ mask: MODULE_ALIGNMENT_FLAG,	hexDarkColor: "#009e73", hexLightColor: "#b2e1d5" },
+		{ mask: MODULE_FORMAT_FLAG, 	hexDarkColor: "#0072b2", hexLightColor: "#b2d4e7" },
+		{ mask: MODULE_DATA_FLAG, 		hexDarkColor: "#cc79a7", hexLightColor: "#efd6e4" },
 	];
 
 	onMount(() => {
