@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { generate, drawQrCode, type QRCodeErrorCorrection, type QrRenderInfo, MODULE_FINDER_FLAG, MODULE_TIMING_FLAG, MODULE_ALIGNMENT_FLAG, MODULE_FORMAT_FLAG, MODULE_DATA_FLAG } from "$lib/logic/qrcode.ts";
+	import t from "$lib/assets/download.png";
 
 	let canvas!: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
 	let input: string = $state("Some Text");
 	let errorCorrection: QRCodeErrorCorrection = $state("L");
 	let showQrSections: boolean = $state(false);
+	let qrDownload: any;
 	const renderSettings: QrRenderInfo[] = [
 		{ mask: MODULE_FINDER_FLAG, 	hexDarkColor: "#d55e00", hexLightColor: "#fcefe6" },
 		{ mask: MODULE_TIMING_FLAG, 	hexDarkColor: "#f0e442", hexLightColor: "#fdfce7" },
@@ -26,6 +28,19 @@
 			drawQrCode(ctx, ...generate(input, errorCorrection),  (showQrSections ? renderSettings : []));
 		}
 	});
+
+	function downloadQrCode() {
+		const MIME_TYPE = "image/png";
+		const imageURL = canvas.toDataURL(MIME_TYPE);
+
+		if (qrDownload) {
+			qrDownload.download = "qrCode.png";
+			qrDownload.href = imageURL;
+			qrDownload.dataset.downloadurl = [MIME_TYPE, qrDownload.download, qrDownload.href].join(":");
+
+			qrDownload.click();
+		}
+	}
 </script>
 
 <div id="content">
@@ -49,6 +64,10 @@
 	</div>
   
 	<div class="controls">
+		<button id="qrDownloadButton" onclick={downloadQrCode} aria-label="Download QR Code" title="Download QR Code">
+			<img src={t} alt="" id="qrDownloadButtonImage"/>
+		</button>
+
 		<input id="input" type="text" placeholder="QR Code text..." bind:value={input} />
   
 		<label id="errorlvlLabel" for="errorlvl">Error Correction</label>
@@ -59,6 +78,8 @@
 			<option value="H">H</option>
 		</select>
 	</div>
+
+	<a id="qrDownload" hidden bind:this={qrDownload} aria-hidden="true"></a>
 </div>
 
 <style>
@@ -119,6 +140,17 @@
 		display: flex;
 		align-items: center;
 		gap: 12px;
+	}
+
+	#qrDownloadButton{
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+	}
+
+	#qrDownloadButtonImage {
+		width: 50px;
 	}
 
 	#input {
