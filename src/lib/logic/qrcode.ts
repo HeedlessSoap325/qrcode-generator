@@ -26,6 +26,12 @@ interface QrCodeInfo {
 	dimensions: number,
 };
 
+export interface QrRenderInfo {
+	mask: number,
+	hexDarkColor: string,
+	hexLightColor: string
+}
+
 interface QRCapacity {
 	numeric: number,
 	alphanumeric: number,
@@ -53,12 +59,12 @@ const structuring = structuringFile as QRStructuring;
 
 const PIXELSIZE = 8;
 
-const MODULE_BLACK_FLAG 	= 0b1;
-const MODULE_FINDER_FLAG 	= 0b10;
-const MODULE_TIMING_FLAG	= 0b100;
-const MODULE_ALIGNMENT_FLAG = 0b1000;
-const MODULE_FORMAT_FLAG	= 0b10000;
-const MODULE_DATA_FLAG 		= 0b100000;
+export const MODULE_BLACK_FLAG 		= 0b1;
+export const MODULE_FINDER_FLAG 	= 0b10;
+export const MODULE_TIMING_FLAG		= 0b100;
+export const MODULE_ALIGNMENT_FLAG 	= 0b1000;
+export const MODULE_FORMAT_FLAG		= 0b10000;
+export const MODULE_DATA_FLAG 		= 0b100000;
 
 const FUNCTION_PATTERN = MODULE_FINDER_FLAG | MODULE_TIMING_FLAG | MODULE_ALIGNMENT_FLAG;
 const ENCODEING_REGION = MODULE_DATA_FLAG | MODULE_FORMAT_FLAG;
@@ -711,12 +717,17 @@ export function generate(input: string, errorCorrection: QRCodeErrorCorrection):
 	return [ qrcode, info.dimensions ];
 }
 
-export function drawQrCode(canvasctx: CanvasRenderingContext2D, qrcode: QRCode, qrcodeDimensions: number): void {
+export function drawQrCode(canvasctx: CanvasRenderingContext2D, qrcode: QRCode, qrcodeDimensions: number, colors: QrRenderInfo[]): void {
 	canvasctx.canvas.width  = qrcodeDimensions * PIXELSIZE;
 	canvasctx.canvas.height = qrcodeDimensions * PIXELSIZE;
 
 	for (let it = 0; it < (qrcodeDimensions ** 2); it++) {
-		const color = (qrcode[it] & MODULE_BLACK_FLAG) ? "black" : "white";
+		let color = (qrcode[it] & MODULE_BLACK_FLAG) ? "black" : "white";
+		for (let colorInfo of colors) {
+			if (qrcode[it] & colorInfo.mask) {
+				color = (qrcode[it] & MODULE_BLACK_FLAG) ? colorInfo.hexDarkColor: colorInfo.hexLightColor;
+			}
+		}
 
 		canvasctx.fillStyle = color;
 		const x = it % qrcodeDimensions;
