@@ -72,10 +72,10 @@
   
 		<label id="errorlvlLabel" for="errorlvl">Error Correction:</label>
 		<select id="errorlvl" bind:value={errorCorrection}>
-			<option value="L">L</option>
-			<option value="M">M</option>
-			<option value="Q">Q</option>
-			<option value="H">H</option>
+			<option value="L">L (~7%)</option>
+			<option value="M">M (~15%)</option>
+			<option value="Q">Q (~25%)</option>
+			<option value="H">H (~30%)</option>
 		</select>
 	</div>
 
