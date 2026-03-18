@@ -8,7 +8,7 @@
 	let input: string = $state("Some Text");
 	let errorCorrection: QRCodeErrorCorrection = $state("L");
 	let showQrSections: boolean = $state(false);
-	let qrDownload: any;
+	let qrDownload: HTMLAnchorElement;
 	const renderSettings: QrRenderInfo[] = [
 		{ mask: MODULE_FINDER_FLAG, 	hexDarkColor: "#d55e00", hexLightColor: "#fcefe6" },
 		{ mask: MODULE_TIMING_FLAG, 	hexDarkColor: "#f0e442", hexLightColor: "#fdfce7" },
