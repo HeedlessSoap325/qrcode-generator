@@ -70,7 +70,7 @@
 
 		<input id="input" type="text" placeholder="QR Code text..." bind:value={input} />
   
-		<label id="errorlvlLabel" for="errorlvl">Error Correction</label>
+		<label id="errorlvlLabel" for="errorlvl">Error Correction:</label>
 		<select id="errorlvl" bind:value={errorCorrection}>
 			<option value="L">L</option>
 			<option value="M">M</option>
